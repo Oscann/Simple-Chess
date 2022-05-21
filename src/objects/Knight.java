@@ -2,7 +2,9 @@ package objects;
 
 import java.awt.Point;
 
+import objects.ObjectManager.Pieces;
 import rendering.Panel;
+import util.Load;
 import util.ObjectUtilities;
 
 public class Knight extends Piece {
@@ -12,6 +14,8 @@ public class Knight extends Piece {
 
 	public Knight(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
+		id = 4;
+		sprite = Load.loadSprite(Pieces.KNIGHT, team);
 	}
 
 	
@@ -20,6 +24,8 @@ public class Knight extends Piece {
 	
 	@Override
 	public void defineMovableIndexes() {
+		
+		movableSpaces.clear();
 		
 		//KNIGHT'S MOVABLE SPACES = {10, 17, 15, 6}
 		

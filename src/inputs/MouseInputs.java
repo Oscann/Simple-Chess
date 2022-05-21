@@ -57,6 +57,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		if (clicked && p.getMovable().contains(index)) {
 			
 			p.moveTo(x, y);
+			panel.getManager().getManager().alternateTeamToPlay();
 			clicked = false;
 			
 		} else if (index != panel.getManager().indexOf(p)){
@@ -92,7 +93,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		
 		if (dragging){
 			
-			boolean moved = p.set();
+			boolean moved = !p.set();
 			if (moved)
 				moveMade();
 			else

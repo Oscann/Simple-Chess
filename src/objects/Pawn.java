@@ -3,17 +3,23 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
+import objects.ObjectManager.Pieces;
 import rendering.Panel;
+import util.Load;
 import util.ObjectUtilities;
 
 public class Pawn extends Piece {
 	
 	private boolean firstMove = true;
+	public ArrayList<Integer> capturableSpaces;
 	
 	public Pawn(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
-		
+		capturableSpaces = new ArrayList<>();
+		id = 0;
+		sprite = Load.loadSprite(Pieces.PAWN, team);
 	}
 	
 	@Override
@@ -38,6 +44,8 @@ public class Pawn extends Piece {
 			
 			updateArray(index, previousIndex);
 			movableSpaces.clear();
+			
+			manager.getManager().alternateTeamToPlay();
 			
 			if (firstMove)
 				firstMove = false;
@@ -78,7 +86,8 @@ public class Pawn extends Piece {
 		
 	}
 	
-	private boolean canCapture(int index) {
+	@Override
+	protected boolean canCapture(int index) {
 		
 		if (index < 0 || index > 63)
 			return false;
@@ -95,8 +104,15 @@ public class Pawn extends Piece {
 	@Override
 	public void defineMovableIndexes() {
 		
+		movableSpaces.clear();
+		capturableSpaces.clear();
+		
 		int range = (firstMove) ? 2 : 1;
 		int index;
+		
+		Point pawnCoord = ObjectUtilities.coordFromIndex(manager.indexOf(this));
+		
+		Point coord;
 		
 		if (team == Team.BLACK) {
 			
@@ -106,20 +122,24 @@ public class Pawn extends Piece {
 				
 				if (!canMove(index))
 					break;
-				
+					
 				movableSpaces.add(index);
 				
 			}
 			
 			index = manager.indexOf(this) + 7;
 			
-			if (canCapture(index))
-				movableSpaces.add(index);
+			coord = ObjectUtilities.coordFromIndex(index);
+			
+			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
+				capturableSpaces.add(index);
 			
 			index = manager.indexOf(this) + 9;
 			
-			if (canCapture(index))
-				movableSpaces.add(index);
+			coord = ObjectUtilities.coordFromIndex(index);
+			
+			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
+				capturableSpaces.add(index);
 			
 		} else {
 			
@@ -127,27 +147,30 @@ public class Pawn extends Piece {
 				
 				index = -i * 8 + manager.indexOf(this);
 				
-				if (index < 0)
+				if (!canMove(index))
 					break;
-				
-				if (manager.objects[index] != null)
-					break;
-				
+					
 				movableSpaces.add(index);
 				
 			}
 			
 			index = manager.indexOf(this) - 7;
 			
-			if (canCapture(index))
-				movableSpaces.add(index);
+			coord = ObjectUtilities.coordFromIndex(index);
+			
+			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
+				capturableSpaces.add(index);
 			
 			index = manager.indexOf(this) - 9;
 			
-			if (canCapture(index))
-				movableSpaces.add(index);
+			coord = ObjectUtilities.coordFromIndex(index);
+			
+			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
+				capturableSpaces.add(index);
 			
 		}
+		
+		movableSpaces.addAll(capturableSpaces);
 		
 	}
 	

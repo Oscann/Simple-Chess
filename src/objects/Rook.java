@@ -2,17 +2,23 @@ package objects;
 
 import java.awt.Point;
 
+import objects.ObjectManager.Pieces;
 import rendering.Panel;
+import util.Load;
 import util.ObjectUtilities;
 
 public class Rook extends Piece {
 
 	public Rook(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
+		id = 5;
+		sprite = Load.loadSprite(Pieces.ROOK, team);
 	}
 
 	@Override
 	public void defineMovableIndexes() {
+		
+		movableSpaces.clear();
 		
 		Point coord;
 		Point rookCoord = ObjectUtilities.coordFromIndex(manager.indexOf(this));
@@ -26,6 +32,9 @@ public class Rook extends Piece {
 			
 			movableSpaces.add(left);
 			
+			if (canCapture(left))
+				break;
+			
 		}
 		
 		for (int right = manager.indexOf(this) + 1; ; right++) {
@@ -37,6 +46,9 @@ public class Rook extends Piece {
 			
 			movableSpaces.add(right);
 			
+			if (canCapture(right))
+				break;
+			
 		}
 		
 		for (int up = manager.indexOf(this) - 8; ; up -= 8) {
@@ -46,6 +58,9 @@ public class Rook extends Piece {
 			
 			movableSpaces.add(up);
 			
+			if (canCapture(up))
+				break;
+			
 		}
 		
 		for (int down = manager.indexOf(this) + 8; ; down += 8) {
@@ -54,6 +69,9 @@ public class Rook extends Piece {
 				break;
 			
 			movableSpaces.add(down);
+			
+			if (canCapture(down))
+				break;
 			
 		}
 	}
