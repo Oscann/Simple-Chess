@@ -62,9 +62,9 @@ public class Panel extends JPanel {
 		for (int x = 0; x < BOARD_SIZE; x++) {
 			
 			if (x % 2 == 0) 
-				g.setColor(black);
-			else
 				g.setColor(white);
+			else
+				g.setColor(black);
 			
 			for (int y = 0; y < BOARD_SIZE; y++) {
 				

@@ -43,7 +43,7 @@ public abstract class Piece {
 	
 	public void render(Graphics g) {
 		
-		g.drawImage(sprite, visualPosition.x + 5, visualPosition.y + 5, Panel.squareSize - 10, Panel.squareSize - 10, null);
+		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
 		
 	}
 	

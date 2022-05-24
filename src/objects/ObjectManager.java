@@ -126,8 +126,8 @@ public class ObjectManager {
 			createObject(Pieces.KNIGHT, 6, team);
 			createObject(Pieces.BISHOP, 2, team);
 			createObject(Pieces.BISHOP, 5, team);
-			blackKing = (King) createObject(Pieces.KING, 3, team);
-			createObject(Pieces.QUEEN, 4, team);
+			blackKing = (King) createObject(Pieces.KING, 4, team);
+			createObject(Pieces.QUEEN, 3, team);
 			
 			for (int i = 8; i < 16; i++) {
 				
@@ -143,8 +143,8 @@ public class ObjectManager {
 			createObject(Pieces.KNIGHT, 62, team);
 			createObject(Pieces.BISHOP, 58, team);
 			createObject(Pieces.BISHOP, 61, team);
-			whiteKing = (King) createObject(Pieces.KING, 59, team);
-			createObject(Pieces.QUEEN, 60, team);
+			whiteKing = (King) createObject(Pieces.KING, 60, team);
+			createObject(Pieces.QUEEN, 59, team);
 			
 			for (int i = 48; i < 56; i++) {
 				
