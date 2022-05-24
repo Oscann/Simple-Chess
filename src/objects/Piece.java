@@ -3,16 +3,20 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import rendering.Panel;
+import util.Load;
 import util.ObjectUtilities;
 
 public abstract class Piece {
 
 	protected Point visualPosition;
+	public short id;
 	public int size = Panel.squareSize;
 	
+	protected BufferedImage sprite;
 	protected Point currentPosition;
 	protected Point center;
 	protected Panel panel;
@@ -25,19 +29,21 @@ public abstract class Piece {
 		this.panel = panel;
 		this.manager = panel.getManager();
 		this.team = team;
+		
+		enterTeam(team);
+		
 		visualPosition = new Point(x, y);
 		currentPosition = (Point) visualPosition.clone();
 		center = new Point(x + Panel.squareSize/2, y + Panel.squareSize/2);
+		
 		ObjectUtilities.correctPosition(this);
 		movableSpaces = new ArrayList<>();
-		defineMovableIndexes();
 		
 	}
 	
 	public void render(Graphics g) {
 		
-		g.setColor(Color.blue);
-		g.fillRect(visualPosition.x, visualPosition.y, size, size);
+		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
 		
 	}
 	
@@ -49,7 +55,6 @@ public abstract class Piece {
 		int _x = (int) center.x/Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
 		
-		defineMovableIndexes();
 		manager.update();
 		
 		if (index - previousIndex == 0) {
@@ -62,8 +67,9 @@ public abstract class Piece {
 		else if (movableSpaces.contains(index)) {
 			
 			updateArray(index, previousIndex);
+			manager.getManager().alternateTeamToPlay();
 			movableSpaces.clear();
-			
+						
 		} else {
 			
 			setPosition(currentPosition);
@@ -96,6 +102,15 @@ public abstract class Piece {
 			manager.whiteTeam.remove(this);
 			
 		}
+		
+	}
+	
+	public void enterTeam(Team team) {
+		
+		if (team == Team.BLACK)
+			manager.blackTeam.add(this);
+		else
+			manager.whiteTeam.add(this);
 		
 	}
 	
@@ -150,6 +165,17 @@ public abstract class Piece {
 			return false;
 		else
 			return true;
+		
+	}
+	
+	protected boolean canCapture(int index) {
+		
+		if (manager.objects[index] == null)
+			return false;
+		else if (manager.objects[index].team != team)
+			return true;
+		else
+			return false;
 		
 	}
 	
