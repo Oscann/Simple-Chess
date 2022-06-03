@@ -1,5 +1,7 @@
 package objects;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashSet;
 
@@ -13,6 +15,7 @@ public class King extends Piece {
 	private static final int[] KING_MOVEMENT = {-9, -8, -7, -1, 1, 7, 8, 9};
 	
 	private boolean noMovement = false;
+	private boolean check = false;
 
 	public King(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
@@ -21,11 +24,23 @@ public class King extends Piece {
 	}
 
 	@Override
+	public void render(Graphics g) {
+		
+		if (check){
+
+			System.out.println("CHEKC");
+			g.setColor(Color.red);
+			g.drawOval(visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize);
+
+		}
+		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
+		
+	}
+
+	@Override
 	public void defineMovableIndexes() {
 		
 		movableSpaces.clear();
-
-		HashSet<Integer> cantMove = getTeamHashSet();
 		
 		Point kingCoord = ObjectUtilities.coordFromIndex(manager.indexOf(this));
 		
@@ -61,6 +76,18 @@ public class King extends Piece {
 		else
 			return manager.whiteKingCantMove;
 		
+	}
+
+	public boolean getCheck() {
+
+		return check;
+
+	}
+
+	public void setCheck(boolean check) {
+
+		this.check = check;
+
 	}
 
 }
