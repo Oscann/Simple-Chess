@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import main.Manager;
 import rendering.Panel;
@@ -62,7 +61,7 @@ public class ObjectManager {
 	
 	private void updateKings() {
 		
-		//blackKing.defineMovableIndexes();
+		blackKing.defineMovableIndexes();
 		whiteKing.defineMovableIndexes();
 		
 	}
@@ -73,9 +72,6 @@ public class ObjectManager {
 		blackKingCantMove.clear();
 		
 		for (int i = 0; i < blackTeam.size(); i++) {
-			
-//			if (blackTeam.get(i).getClass() == genericKing.getClass())
-//				continue;
 			
 			blackTeam.get(i).defineMovableIndexes();
 			
@@ -90,11 +86,7 @@ public class ObjectManager {
 		}
 		
 		for (int i = 0; i < whiteTeam.size(); i++) {
-			
-//			if (whiteTeam.get(i).getClass() == genericKing.getClass())
-//				continue;
-			
-			whiteTeam.get(i).movableSpaces.clear();
+		
 			whiteTeam.get(i).defineMovableIndexes();
 			
 			if (whiteTeam.get(i).id == 0) {
@@ -103,7 +95,7 @@ public class ObjectManager {
 				blackKingCantMove.addAll(p.capturableSpaces);
 				
 			} else 
-				blackKingCantMove.addAll(blackTeam.get(i).movableSpaces);
+				blackKingCantMove.addAll(whiteTeam.get(i).movableSpaces);
 
 		}
 		
@@ -163,7 +155,7 @@ public class ObjectManager {
 			if (objects[i] == null)
 				continue;
 			
-			if (objects[i].team != manager.teamToPlay)
+			if (objects[i].team != Manager.teamToPlay)
 				continue;
 			
 			boolean checkX = click.x > objects[i].getPosition().x && click.x < objects[i].getPosition().x + Panel.squareSize;

@@ -28,9 +28,8 @@ public class King extends Piece {
 		
 		if (check){
 
-			System.out.println("CHEKC");
 			g.setColor(Color.red);
-			g.drawOval(visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize);
+			g.fillOval(visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize);
 
 		}
 		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);

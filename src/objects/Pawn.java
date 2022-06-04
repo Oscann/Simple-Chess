@@ -1,7 +1,5 @@
 package objects;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -17,9 +15,16 @@ public class Pawn extends Piece {
 	
 	public Pawn(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
-		capturableSpaces = new ArrayList<>();
+		
 		id = 0;
 		sprite = Load.loadSprite(Pieces.PAWN, team);
+	}
+
+	protected void start(){
+
+		capturableSpaces = new ArrayList<>();
+		defineMovableIndexes();
+
 	}
 	
 	@Override
@@ -30,12 +35,13 @@ public class Pawn extends Piece {
 		int _y = (int) center.y/Panel.squareSize;
 		int _x = (int) center.x/Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
-		
-		defineMovableIndexes();
+
+		manager.update();
 		
 		if (index - previousIndex == 0) {
 			
 			ObjectUtilities.correctPosition(this);
+			
 			return true;
 			
 		}
@@ -43,9 +49,7 @@ public class Pawn extends Piece {
 		else if (movableSpaces.contains(index)) {
 			
 			updateArray(index, previousIndex);
-			movableSpaces.clear();
-			
-			manager.getManager().alternateTeamToPlay();
+			manager.update();
 			
 			if (firstMove)
 				firstMove = false;
@@ -68,7 +72,6 @@ public class Pawn extends Piece {
 		
 		setPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
 		updateArray(index, previousIndex);
-		movableSpaces.clear();
 		
 		if(firstMove)
 			firstMove = false;

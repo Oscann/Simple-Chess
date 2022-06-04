@@ -62,8 +62,10 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 			
 		} else if (index != panel.getManager().indexOf(p)){
 			
-			p = null;
-			clicked = false;
+			p = panel.getManager().clickedObject(new Point(e.getX(), e.getY()));
+
+			if (p == null)
+				clicked = false;
 			
 		}
 		
@@ -79,9 +81,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 			p = panel.getManager().clickedObject(currentClick);
 
 		}
-		
-		if (p == null)
-			return;
 		
 	}
 
@@ -115,6 +114,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	private void moveMade() {
 		
 		resetMove();
+		panel.getManager().getManager().alternateTeamToPlay();
 		
 	}
 	

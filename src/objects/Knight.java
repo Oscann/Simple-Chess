@@ -17,10 +17,6 @@ public class Knight extends Piece {
 		id = 4;
 		sprite = Load.loadSprite(Pieces.KNIGHT, team);
 	}
-
-	
-	//KNIGHT BUGGED: LINE 39 ---- canMoveOrCapture ------ index out of bounds
-	
 	
 	@Override
 	public void defineMovableIndexes() {

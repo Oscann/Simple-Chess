@@ -16,7 +16,7 @@ public class Panel extends JPanel {
 	public static final float SCALE = 1f;
 	public static int panelSize;
 	
-	public Color white = new Color(220, 220, 220);
+	public Color white = new Color(200, 200, 200);
 	public Color black = new Color(50, 50, 50);
 	
 	private Dimension dimension;

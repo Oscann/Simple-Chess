@@ -1,7 +1,6 @@
 package objects;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 import objects.ObjectManager.Pieces;
 import rendering.Panel;

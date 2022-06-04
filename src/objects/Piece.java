@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import rendering.Panel;
-import util.Load;
 import util.ObjectUtilities;
 
 public abstract class Piece {
@@ -38,6 +37,8 @@ public abstract class Piece {
 		
 		ObjectUtilities.correctPosition(this);
 		movableSpaces = new ArrayList<>();
+
+		start();
 		
 	}
 	
@@ -45,6 +46,12 @@ public abstract class Piece {
 		
 		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
 		
+	}
+
+	protected void start(){
+
+		defineMovableIndexes();
+
 	}
 	
 	public boolean set() {
@@ -54,9 +61,7 @@ public abstract class Piece {
 		int _y = (int) center.y/Panel.squareSize;
 		int _x = (int) center.x/Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
-		
-		manager.update();
-		
+
 		if (index - previousIndex == 0) {
 			
 			ObjectUtilities.correctPosition(this);
@@ -67,8 +72,7 @@ public abstract class Piece {
 		else if (movableSpaces.contains(index)) {
 			
 			updateArray(index, previousIndex);
-			manager.getManager().alternateTeamToPlay();
-			movableSpaces.clear();
+			manager.update();
 						
 		} else {
 			
@@ -87,7 +91,8 @@ public abstract class Piece {
 		
 		setPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
 		updateArray(index, previousIndex);
-		movableSpaces.clear();
+
+		manager.update();
 		
 	}
 	

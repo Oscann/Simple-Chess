@@ -25,8 +25,8 @@ public class Manager {
 	
 	public void checkCheck() {
 		
-		short blackIndex = (short) manager.indexOf(manager.blackKing);
-		short whiteIndex = (short) manager.indexOf(manager.whiteKing);
+		int blackIndex = manager.indexOf(manager.blackKing);
+		int whiteIndex = manager.indexOf(manager.whiteKing);
 
 		if (manager.blackKingCantMove.contains(blackIndex))
 			manager.blackKing.setCheck(true);
