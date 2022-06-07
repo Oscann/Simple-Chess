@@ -39,5 +39,9 @@ public class Manager {
 			manager.whiteKing.setCheck(false);
 		
 	}
+
+	public void checkVictory() {
+		
+	}
 	
 }

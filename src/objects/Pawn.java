@@ -13,6 +13,8 @@ public class Pawn extends Piece {
 	private boolean firstMove = true;
 	public ArrayList<Integer> capturableSpaces;
 	
+
+
 	public Pawn(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
 		
@@ -26,6 +28,8 @@ public class Pawn extends Piece {
 		defineMovableIndexes();
 
 	}
+
+
 	
 	@Override
 	public boolean set() {
@@ -63,6 +67,8 @@ public class Pawn extends Piece {
 		return false;
 		
 	}
+
+
 	
 	@Override
 	public void moveTo(int x, int y) {
@@ -77,6 +83,8 @@ public class Pawn extends Piece {
 			firstMove = false;
 		
 	}
+
+
 	
 	private boolean canMove(int index) {
 		
@@ -89,6 +97,8 @@ public class Pawn extends Piece {
 		
 	}
 	
+
+
 	@Override
 	protected boolean canCapture(int index) {
 		
@@ -104,6 +114,8 @@ public class Pawn extends Piece {
 		
 	}
 
+
+	
 	@Override
 	public void defineMovableIndexes() {
 		
