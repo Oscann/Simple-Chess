@@ -89,16 +89,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		if (p == null)
 			return;
-		
-		if (dragging){
-			
-			boolean moved = !p.set();
-			if (moved)
-				moveMade();
-			else
-				resetMove();
-			
-		}
+
+		p.set();
 		
 	}
 
@@ -111,7 +103,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseMoved(MouseEvent e) {}
 	
-	private void moveMade() {
+	public void moveMade() {
 		
 		resetMove();
 		panel.getManager().getManager().alternateTeamToPlay();

@@ -10,108 +10,64 @@ import util.ObjectUtilities;
 
 public class Pawn extends Piece {
 	
-	private boolean firstMove = true;
 	public ArrayList<Integer> capturableSpaces;
 	
 
 
 	public Pawn(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
-		
 		id = 0;
 		sprite = Load.loadSprite(Pieces.PAWN, team);
 	}
 
 	protected void start(){
-
 		capturableSpaces = new ArrayList<>();
 		defineMovableIndexes();
-
-	}
-
-
-	
-	@Override
-	public boolean set() {
-
-		int previousIndex = manager.indexOf(this);
-		
-		int _y = (int) center.y/Panel.squareSize;
-		int _x = (int) center.x/Panel.squareSize;
-		int index = ObjectUtilities.indexFromCoord(_x, _y);
-
-		manager.update();
-		
-		if (index - previousIndex == 0) {
-			
-			ObjectUtilities.correctPosition(this);
-			
-			return true;
-			
-		}
-		
-		else if (movableSpaces.contains(index)) {
-			
-			updateArray(index, previousIndex);
-			manager.update();
-			
-			if (firstMove)
-				firstMove = false;
-			
-		} else {
-			
-			setPosition(currentPosition);
-			
-		}
-		
-		return false;
-		
-	}
-
-
-	
-	@Override
-	public void moveTo(int x, int y) {
-		
-		int index = ObjectUtilities.indexFromCoord(x, y);
-		int previousIndex = manager.indexOf(this);
-		
-		setPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
-		updateArray(index, previousIndex);
-		
-		if(firstMove)
-			firstMove = false;
-		
 	}
 
 
 	
 	private boolean canMove(int index) {
-		
 		if (index < 0 || index > 63)
 			return false;
 		else if (manager.objects[index] == null)
 			return true;
 		else
 			return false;
-		
 	}
 	
 
 
 	@Override
+	public boolean set() {
+		boolean clicked = super.set();
+
+		int index = manager.indexOf(this);
+
+		if (team == Team.BLACK && index > 55 && index < 64){
+
+			panel.pawnTransformation(this);
+
+		} else if (index >= 0 && index < 8){
+
+			panel.pawnTransformation(this);
+			
+		}
+
+		return clicked;
+	}
+
+
+
+	@Override
 	protected boolean canCapture(int index) {
-		
 		if (index < 0 || index > 63)
 			return false;
 		else if (manager.objects[index] != null)
 			if (manager.objects[index].team != this.team)
 				return true;
-			else
-				return false;
-		else
-			return false;
-		
+			else return false;
+		else return false;
 	}
 
 
@@ -121,6 +77,8 @@ public class Pawn extends Piece {
 		
 		movableSpaces.clear();
 		capturableSpaces.clear();
+
+		ArrayList<Integer> canCap = new ArrayList<>();
 		
 		int range = (firstMove) ? 2 : 1;
 		int index;
@@ -143,18 +101,22 @@ public class Pawn extends Piece {
 			}
 			
 			index = manager.indexOf(this) + 7;
+
+			capturableSpaces.add(index);
 			
 			coord = ObjectUtilities.coordFromIndex(index);
 			
 			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
-				capturableSpaces.add(index);
+				canCap.add(index);
 			
 			index = manager.indexOf(this) + 9;
+
+			capturableSpaces.add(index);
 			
 			coord = ObjectUtilities.coordFromIndex(index);
 			
 			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
-				capturableSpaces.add(index);
+				canCap.add(index);
 			
 		} else {
 			
@@ -170,22 +132,26 @@ public class Pawn extends Piece {
 			}
 			
 			index = manager.indexOf(this) - 7;
+
+			capturableSpaces.add(index);
 			
 			coord = ObjectUtilities.coordFromIndex(index);
 			
 			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
-				capturableSpaces.add(index);
+				canCap.add(index);
 			
 			index = manager.indexOf(this) - 9;
+
+			capturableSpaces.add(index);
 			
 			coord = ObjectUtilities.coordFromIndex(index);
 			
 			if (canCapture(index) && !(Math.abs(coord.x - pawnCoord.x) > 1))
-				capturableSpaces.add(index);
+				canCap.add(index);
 			
 		}
 		
-		movableSpaces.addAll(capturableSpaces);
+		movableSpaces.addAll(canCap);
 		
 	}
 	

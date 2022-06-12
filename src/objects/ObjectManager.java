@@ -20,6 +20,8 @@ public class ObjectManager {
 	private Dimension bounds;
 	private Panel panel;
 	private Manager manager;
+
+	public Pieces[] pawnEvolution = {Pieces.BISHOP, Pieces.KNIGHT, Pieces.QUEEN, Pieces.ROOK};
 	
 	public King blackKing, whiteKing;
 	
@@ -58,6 +60,7 @@ public class ObjectManager {
 		updateIndexes();
 		updateKings();
 		manager.checkCheck();
+		System.out.println(panel.transforming);
 	}
 
 
@@ -75,19 +78,35 @@ public class ObjectManager {
 		blackKingCantMove.clear();
 		
 		for (int i = 0; i < blackTeam.size(); i++) {
+
 			blackTeam.get(i).defineMovableIndexes();
 			if (blackTeam.get(i).id == 0) {
+
 				Pawn p = (Pawn) blackTeam.get(i);
 				whiteKingCantMove.addAll(p.capturableSpaces);
+				
+			} else if (blackTeam.get(i).id == 3){
+
+				King p = (King) blackTeam.get(i);
+				whiteKingCantMove.addAll(p.capturableSpaces);
+
 			} else 
 				whiteKingCantMove.addAll(blackTeam.get(i).movableSpaces);
 		}
 		
 		for (int i = 0; i < whiteTeam.size(); i++) {
+
 			whiteTeam.get(i).defineMovableIndexes();
 			if (whiteTeam.get(i).id == 0) {
+
 				Pawn p = (Pawn) whiteTeam.get(i);
 				blackKingCantMove.addAll(p.capturableSpaces);
+
+			} else if (whiteTeam.get(i).id == 3){
+
+				King p = (King) whiteTeam.get(i);
+				blackKingCantMove.addAll(p.capturableSpaces);
+
 			} else 
 				blackKingCantMove.addAll(whiteTeam.get(i).movableSpaces);
 		}
@@ -133,14 +152,25 @@ public class ObjectManager {
 
 	
 	public Piece clickedObject(Point click) {
+
+		if (panel.transforming){
+			if (click.y > panel.spriteMenuSize*3/2 && click.y < panel.spriteMenuSize * 5/2){
+				for (int i = 0; i < 4; i++)
+					if (click.x > i*panel.spriteMenuSize && click.x < (i + 1) * panel.spriteMenuSize) {
+						createObject(pawnEvolution[i], panel.transIndex, panel.transTeam); 
+						panel.transforming = false;}
+			}
+			return null;
+		}
+
 		for (int i = 0; i < objects.length; i++) {
 			if (objects[i] == null)
 				continue;
 			if (objects[i].team != Manager.teamToPlay)
 				continue;
-			boolean checkX = click.x > objects[i].getPosition().x && click.x < objects[i].getPosition().x + Panel.squareSize;
-			boolean checkY = click.y > objects[i].getPosition().y && click.y < objects[i].getPosition().y + Panel.squareSize;
-			if (checkX && checkY)
+
+			if (click.x > objects[i].getPosition().x && click.x < objects[i].getPosition().x + Panel.squareSize && 
+				click.y > objects[i].getPosition().y && click.y < objects[i].getPosition().y + Panel.squareSize)
 				return objects[i];
 		}
 		return null;
@@ -196,6 +226,12 @@ public class ObjectManager {
 	
 	public Manager getManager() {
 		return manager;
+	}
+
+
+
+	public Panel getPanel(){
+		return panel;
 	}
 
 

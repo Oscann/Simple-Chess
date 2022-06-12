@@ -3,11 +3,16 @@ package rendering;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 
 import javax.swing.JPanel;
 
 import inputs.MouseInputs;
 import objects.ObjectManager;
+import objects.Piece;
+import objects.Team;
+import util.Load;
 
 public class Panel extends JPanel {
 	
@@ -15,6 +20,12 @@ public class Panel extends JPanel {
 	public static final int BOARD_SIZE = 8; 
 	public static final float SCALE = 1f;
 	public static int panelSize;
+
+	public Team transTeam = Team.BLACK;
+	public int transIndex;
+	public int spriteMenuSize = panelSize/4;
+
+	public boolean transforming = false;
 	
 	public Color white = new Color(200, 200, 200);
 	public Color black = new Color(50, 50, 50);
@@ -23,7 +34,7 @@ public class Panel extends JPanel {
 	
 	private ObjectManager manager;
 	
-	private MouseInputs inputs;
+	public MouseInputs inputs;
 	
 	public Panel() {
 		
@@ -40,6 +51,8 @@ public class Panel extends JPanel {
 		this.addMouseMotionListener(inputs);
 		
 	}
+
+
 	
 	public void paintComponent(Graphics g) {
 		
@@ -53,9 +66,13 @@ public class Panel extends JPanel {
 		}
 		
 		manager.render(g);
-		
-		repaint();
+
+		if (transforming)
+			drawTransformationMenu(g);
+
 	}
+
+
 
 	private void drawBoard(Graphics g) {
 		
@@ -76,6 +93,8 @@ public class Panel extends JPanel {
 		}
 		
 	}
+
+
 	
 	private void alternateColor(Graphics g) {
 		
@@ -85,17 +104,39 @@ public class Panel extends JPanel {
 			g.setColor(black);
 		
 	}
+
+
+
+	public void pawnTransformation(Piece p){
+
+		transforming = true;
+		transTeam = p.team;
+		transIndex = manager.indexOf(p);
+
+	}
+
+
+
+	public void drawTransformationMenu(Graphics g){
+
+		for (int i = 0; i < manager.pawnEvolution.length; i++){
+
+			BufferedImage img = Load.loadSprite(manager.pawnEvolution[i], transTeam);
+
+			g.drawImage(img, i * spriteMenuSize, 3*spriteMenuSize/2, spriteMenuSize, spriteMenuSize, null);
+			
+		}
+
+	}
+
+
 	
 	public ObjectManager getManager() {
-		
 		return manager;
-		
 	}
 	
 	public Dimension getDimension() {
-		
 		return dimension;
-		
 	}
 	
 }

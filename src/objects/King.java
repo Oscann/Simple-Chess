@@ -3,6 +3,7 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import objects.ObjectManager.Pieces;
@@ -16,11 +17,21 @@ public class King extends Piece {
 	
 	private boolean noMovement = false;
 	private boolean check = false;
+	public ArrayList<Integer> capturableSpaces;
 
 	public King(int x, int y, Team team, Panel panel) {
 		super(x, y, team, panel);
+
 		id = 3;
 		sprite = Load.loadSprite(Pieces.KING, team);
+	}
+
+	@Override
+	protected void start(){
+
+		capturableSpaces = new  ArrayList<>();
+		defineMovableIndexes();
+
 	}
 
 	@Override
@@ -40,6 +51,7 @@ public class King extends Piece {
 	public void defineMovableIndexes() {
 		
 		movableSpaces.clear();
+		capturableSpaces.clear();
 		
 		Point kingCoord = ObjectUtilities.coordFromIndex(manager.indexOf(this));
 		
@@ -52,6 +64,8 @@ public class King extends Piece {
 			index = manager.indexOf(this) + King.KING_MOVEMENT[i];
 			
 			coord = ObjectUtilities.coordFromIndex(index);
+
+			capturableSpaces.add(index);
 			
 			if (Math.abs(coord.x - kingCoord.x) > 1 || getTeamHashSet().contains(index))
 				continue;
