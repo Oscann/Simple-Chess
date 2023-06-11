@@ -71,14 +71,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		if (!clicked) {
-
+		if (!clicked)
 			p = panel.getObjectManager().clickedObject(currentClick);
-
-		}
-
-		if (p == null)
-			return;
 
 	}
 
@@ -88,15 +82,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		if (p == null)
 			return;
 
-		if (dragging) {
-
-			boolean moved = p.touch();
-			if (moved)
-				moveMade();
-			else
-				resetMove();
-
-		}
+		resetMove();
 
 	}
 
@@ -112,18 +98,10 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 	}
 
-	private void moveMade() {
-
-		resetMove();
-
-	}
-
 	private void resetMove() {
-
 		p = null;
 		clicked = false;
 		dragging = false;
-
 	}
 
 	public Piece getPiece() {
