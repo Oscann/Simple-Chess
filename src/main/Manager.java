@@ -13,7 +13,7 @@ public class Manager {
 	public Manager(Panel panel) {
 
 		this.panel = panel;
-		this.manager = new ObjectManager(panel);
+		this.manager = new ObjectManager(this);
 
 	}
 
@@ -36,6 +36,10 @@ public class Manager {
 
 	public ObjectManager getObjectManager() {
 		return manager;
+	}
+
+	public Panel getPanel() {
+		return panel;
 	}
 
 }

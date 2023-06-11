@@ -11,17 +11,19 @@ import util.ObjectUtilities;
 
 public abstract class Piece {
 
-	protected Point visualPosition;
-	public short id;
-	public int size = Panel.squareSize;
-
-	protected BufferedImage sprite;
 	protected Point currentPosition;
+	protected Point visualPosition;
 	protected Point center;
-	protected Panel panel;
-	protected ObjectManager manager;
+
+	public short id;
+	protected boolean firstMove = true;
+	public int size = Panel.squareSize;
 	protected Team team;
 	protected ArrayList<Integer> movableSpaces;
+
+	protected BufferedImage sprite;
+	protected Panel panel;
+	protected ObjectManager manager;
 
 	public Piece(int x, int y, Team team, Panel panel) {
 
@@ -37,7 +39,11 @@ public abstract class Piece {
 		ObjectUtilities.correctPosition(this);
 		movableSpaces = new ArrayList<>();
 
+		defineMovableIndexes();
+
 	}
+
+	public abstract void defineMovableIndexes();
 
 	public void render(Graphics g) {
 
@@ -53,7 +59,7 @@ public abstract class Piece {
 		int _x = (int) center.x / Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
 
-		manager.update();
+		System.out.println(this.movableSpaces);
 
 		if (index - previousIndex == 0) {
 
@@ -64,14 +70,16 @@ public abstract class Piece {
 
 		else if (movableSpaces.contains(index)) {
 
+			manager.update();
 			updateArray(index, previousIndex);
 			manager.getManager().alternateTeamToPlay();
 			movableSpaces.clear();
 
+			if (firstMove)
+				firstMove = false;
+
 		} else {
-
 			setPosition(currentPosition);
-
 		}
 
 		return false;
@@ -87,6 +95,10 @@ public abstract class Piece {
 		updateArray(index, previousIndex);
 		movableSpaces.clear();
 
+		if (firstMove)
+			firstMove = false;
+
+		manager.update();
 	}
 
 	public void destroy() {
@@ -113,15 +125,13 @@ public abstract class Piece {
 
 	}
 
-	public abstract void defineMovableIndexes();
-
-	public void updateArray(int index, int previousIndex) {
+	public void updateArray(int index, int prevIndex) {
 
 		if (manager.objects[index] != null)
 			manager.objects[index].destroy();
 
 		manager.objects[index] = this;
-		manager.objects[previousIndex] = null;
+		manager.objects[prevIndex] = null;
 
 		ObjectUtilities.correctPosition(this);
 		currentPosition = (Point) visualPosition.clone();
@@ -143,19 +153,15 @@ public abstract class Piece {
 		g.setColor(Color.gray);
 
 		for (int i = 0; i < movableSpaces.size(); i++) {
-
 			coord = ObjectUtilities.coordFromIndex(movableSpaces.get(i));
 
 			g.drawOval(coord.x * Panel.squareSize + Panel.squareSize / 4,
 					coord.y * Panel.squareSize + Panel.squareSize / 4,
 					Panel.squareSize / 2, Panel.squareSize / 2);
-
 		}
-
 	}
 
 	protected boolean canMoveOrCapture(int index) {
-
 		if (index < 0 || index > 63)
 			return false;
 
