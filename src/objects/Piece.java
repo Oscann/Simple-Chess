@@ -30,7 +30,7 @@ public abstract class Piece {
 		this.panel = panel;
 		this.manager = panel.getObjectManager();
 
-		enterTeam(team);
+		joinTeam(team);
 
 		visualPosition = new Point(x, y);
 		currentPosition = (Point) visualPosition.clone();
@@ -58,8 +58,6 @@ public abstract class Piece {
 		int _y = (int) center.y / Panel.squareSize;
 		int _x = (int) center.x / Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
-
-		System.out.println(this.movableSpaces);
 
 		if (index - previousIndex == 0) {
 
@@ -115,7 +113,7 @@ public abstract class Piece {
 
 	}
 
-	public void enterTeam(Team team) {
+	public void joinTeam(Team team) {
 		this.team = team;
 
 		if (team == Team.BLACK)

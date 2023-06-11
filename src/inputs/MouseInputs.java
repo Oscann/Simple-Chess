@@ -33,7 +33,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		currentClick = new Point(e.getX() - Panel.squareSize / 2, e.getY() - Panel.squareSize / 2);
 
 		p.setPosition(currentClick);
-		p.updateCenterPosition();
 
 	}
 

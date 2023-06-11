@@ -156,7 +156,7 @@ public class ObjectManager {
 		return -1;
 	}
 
-	public Piece createObject(Pieces p, int index, Team team) {
+	public Piece createObject(EPieces p, int index, Team team) {
 
 		Point coord = ObjectUtilities.coordFromIndex(index);
 
@@ -203,16 +203,5 @@ public class ObjectManager {
 
 	public Manager getManager() {
 		return manager;
-	}
-
-	public enum Pieces {
-
-		PAWN,
-		ROOK,
-		KNIGHT,
-		QUEEN,
-		BISHOP,
-		KING;
-
 	}
 }
