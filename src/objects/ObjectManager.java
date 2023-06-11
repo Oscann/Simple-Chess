@@ -136,7 +136,7 @@ public class ObjectManager {
 		// createObject(Pieces.PAWN, i, Team.WHITE);
 
 		// }
-
+		createObject(EPieces.ROOK, 0, Team.BLACK);
 	}
 
 	public Piece clickedObject(Point click) {
@@ -145,13 +145,13 @@ public class ObjectManager {
 			if (objects[i] == null)
 				continue;
 
-			if (objects[i].team != Manager.teamToPlay)
-				continue;
+			// if (objects[i].team != Manager.teamToPlay)
+			// continue;
 
-			boolean checkX = click.x > objects[i].getPosition().x
-					&& click.x < objects[i].getPosition().x + Panel.squareSize;
-			boolean checkY = click.y > objects[i].getPosition().y
-					&& click.y < objects[i].getPosition().y + Panel.squareSize;
+			boolean checkX = click.x > objects[i].getVisualPosition().x
+					&& click.x < objects[i].getVisualPosition().x + Panel.squareSize;
+			boolean checkY = click.y > objects[i].getVisualPosition().y
+					&& click.y < objects[i].getVisualPosition().y + Panel.squareSize;
 
 			if (checkX && checkY)
 				return objects[i];
@@ -200,9 +200,9 @@ public class ObjectManager {
 				// panel);
 				break;
 			case ROOK:
-				// objects[index] = new Rook(coord.x * Panel.squareSize, coord.y *
-				// Panel.squareSize, team,
-				// panel);
+				objects[index] = new Rook(coord.x * Panel.squareSize, coord.y *
+						Panel.squareSize, team,
+						panel);
 				break;
 		}
 

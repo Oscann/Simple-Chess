@@ -59,6 +59,8 @@ public abstract class Piece {
 		int _x = (int) center.x / Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
 
+		defineMovableIndexes();
+
 		if (movableSpaces.contains(index)) {
 
 			ObjectUtilities.correctPosition(this);
@@ -168,7 +170,7 @@ public abstract class Piece {
 
 	}
 
-	public Point getPosition() {
+	public Point getVisualPosition() {
 		return visualPosition;
 	}
 

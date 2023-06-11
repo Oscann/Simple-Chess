@@ -11,6 +11,13 @@ import util.ObjectUtilities;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
+	/*
+	 * TO DO:
+	 * - Understand this stupid code
+	 * - Seperate piece selection from touching
+	 * - Fix it entirely
+	 */
+
 	Panel panel;
 
 	private Point currentClick;
@@ -38,6 +45,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		System.out.println("Clicked");
 
 		x = (int) e.getX() / Panel.squareSize;
 		y = (int) e.getY() / Panel.squareSize;
@@ -69,10 +77,14 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 
+		System.out.println("Pressed");
+
 		currentClick = new Point(e.getX(), e.getY());
 
 		if (!clicked)
 			p = panel.getObjectManager().clickedObject(currentClick);
+
+		System.out.println(p);
 
 	}
 
@@ -82,7 +94,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		if (p == null)
 			return;
 
-		resetMove();
+		// resetMove();
 
 	}
 
