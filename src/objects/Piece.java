@@ -51,7 +51,7 @@ public abstract class Piece {
 
 	}
 
-	public boolean set() {
+	public boolean touch() {
 
 		int previousIndex = manager.indexOf(this);
 
@@ -59,25 +59,20 @@ public abstract class Piece {
 		int _x = (int) center.x / Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
 
-		if (index - previousIndex == 0) {
+		if (movableSpaces.contains(index)) {
 
 			ObjectUtilities.correctPosition(this);
-			return true;
-
-		}
-
-		else if (movableSpaces.contains(index)) {
-
-			manager.update();
-			updateArray(index, previousIndex);
-			manager.getManager().alternateTeamToPlay();
-			movableSpaces.clear();
+			sit(index, previousIndex);
 
 			if (firstMove)
 				firstMove = false;
 
+		} else if (index - previousIndex == 0) {
+			setVisualPosition(currentPosition);
+			return true;
+
 		} else {
-			setPosition(currentPosition);
+			setVisualPosition(currentPosition);
 		}
 
 		return false;
@@ -89,14 +84,17 @@ public abstract class Piece {
 		int index = ObjectUtilities.indexFromCoord(x, y);
 		int previousIndex = manager.indexOf(this);
 
-		setPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
-		updateArray(index, previousIndex);
-		movableSpaces.clear();
+		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
+		sit(index, previousIndex);
 
 		if (firstMove)
 			firstMove = false;
+	}
 
-		manager.update();
+	public void sit(int index, int prevIndex) {
+		currentPosition = (Point) visualPosition.clone();
+		movableSpaces.clear();
+		manager.update(index, prevIndex, this);
 	}
 
 	public void destroy() {
@@ -120,19 +118,6 @@ public abstract class Piece {
 			manager.blackTeam.add(this);
 		else
 			manager.whiteTeam.add(this);
-
-	}
-
-	public void updateArray(int index, int prevIndex) {
-
-		if (manager.objects[index] != null)
-			manager.objects[index].destroy();
-
-		manager.objects[index] = this;
-		manager.objects[prevIndex] = null;
-
-		ObjectUtilities.correctPosition(this);
-		currentPosition = (Point) visualPosition.clone();
 
 	}
 
@@ -187,7 +172,7 @@ public abstract class Piece {
 		return visualPosition;
 	}
 
-	public void setPosition(Point position) {
+	public void setVisualPosition(Point position) {
 		this.visualPosition = position;
 		updateCenterPosition();
 	}

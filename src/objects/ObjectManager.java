@@ -46,12 +46,15 @@ public class ObjectManager {
 
 	}
 
-	public void update() {
+	public void update(int index, int previousIndex, Piece p) {
 
-		updateIndexes();
-		updateKings();
-		manager.checkCheck();
+		updateArray(index, previousIndex, p);
 		manager.alternateTeamToPlay();
+
+		// updateIndexes();
+		// updateKings();
+		// manager.checkCheck();
+		// manager.alternateTeamToPlay();
 
 	}
 
@@ -90,6 +93,16 @@ public class ObjectManager {
 			blackKingCantMove.addAll(whiteTeam.get(i).movableSpaces);
 
 		}
+
+	}
+
+	public void updateArray(int index, int prevIndex, Piece p) {
+
+		if (objects[index] != null)
+			objects[index].destroy();
+
+		objects[index] = p;
+		objects[prevIndex] = null;
 
 	}
 

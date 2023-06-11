@@ -12,7 +12,7 @@ public class ObjectUtilities {
 		int rightX = (int) (p.getCenterPosition().x / Panel.squareSize) * Panel.squareSize;
 		int rightY = (int) (p.getCenterPosition().y / Panel.squareSize) * Panel.squareSize;
 
-		p.setPosition(new Point(rightX, rightY));
+		p.setVisualPosition(new Point(rightX, rightY));
 
 	}
 

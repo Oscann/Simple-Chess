@@ -32,7 +32,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX() - Panel.squareSize / 2, e.getY() - Panel.squareSize / 2);
 
-		p.setPosition(currentClick);
+		p.setVisualPosition(currentClick);
 
 	}
 
@@ -50,7 +50,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		}
 
-		clicked = p.set();
+		clicked = p.touch();
 
 		if (clicked && p.getMovable().contains(index)) {
 
@@ -90,7 +90,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		if (dragging) {
 
-			boolean moved = p.set();
+			boolean moved = p.touch();
 			if (moved)
 				moveMade();
 			else
