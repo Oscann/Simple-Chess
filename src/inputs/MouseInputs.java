@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import objects.ObjectManager;
 import objects.Piece;
 import rendering.Panel;
 import util.ObjectUtilities;
@@ -18,15 +19,17 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	 * - Fix it entirely
 	 */
 
-	Panel panel;
+	private Panel panel;
+	private ObjectManager objmng;
 
 	private Point currentClick;
 	private Piece p;
-	private boolean clicked = false, dragging = false;
+	private boolean selected = false;
 	private Integer x, y, index;
 
 	public MouseInputs(Panel panel) {
 		this.panel = panel;
+		this.objmng = panel.getObjectManager();
 	}
 
 	@Override
@@ -34,8 +37,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		if (p == null)
 			return;
-
-		dragging = true;
 
 		currentClick = new Point(e.getX() - Panel.squareSize / 2, e.getY() - Panel.squareSize / 2);
 
@@ -45,31 +46,24 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("Clicked");
+
+		if (p == null && objmng.clickedObject(new Point(e.getX(), e.getY())) == null) {
+			selected = false;
+			return;
+		}
 
 		x = (int) e.getX() / Panel.squareSize;
 		y = (int) e.getY() / Panel.squareSize;
 		index = ObjectUtilities.indexFromCoord(x, y);
 
-		if (p == null && panel.getObjectManager().clickedObject(new Point(e.getX(), e.getY())) == null) {
+		selected = p.touch();
 
-			clicked = false;
-			return;
-
-		}
-
-		clicked = p.touch();
-
-		if (clicked && p.getMovable().contains(index)) {
-
+		if (selected && p.getMovable().contains(index)) {
 			p.moveTo(x, y);
-			clicked = false;
-
-		} else if (index != panel.getObjectManager().indexOf(p)) {
-
+			selected = false;
+		} else if (index != objmng.indexOf(p)) {
 			p = null;
-			clicked = false;
-
+			selected = false;
 		}
 
 	}
@@ -77,14 +71,10 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 
-		System.out.println("Pressed");
-
 		currentClick = new Point(e.getX(), e.getY());
 
-		if (!clicked)
-			p = panel.getObjectManager().clickedObject(currentClick);
-
-		System.out.println(p);
+		if (!selected)
+			p = objmng.clickedObject(currentClick);
 
 	}
 
@@ -112,16 +102,15 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	private void resetMove() {
 		p = null;
-		clicked = false;
-		dragging = false;
+		selected = false;
 	}
 
 	public Piece getPiece() {
 		return p;
 	}
 
-	public boolean getClicked() {
-		return clicked;
+	public boolean hasSelected() {
+		return selected;
 	}
 
 }

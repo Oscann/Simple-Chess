@@ -59,6 +59,7 @@ public abstract class Piece {
 		int _x = (int) center.x / Panel.squareSize;
 		int index = ObjectUtilities.indexFromCoord(_x, _y);
 
+		// Move to update
 		defineMovableIndexes();
 
 		if (movableSpaces.contains(index)) {

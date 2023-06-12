@@ -31,15 +31,14 @@ public class Panel extends JPanel {
 
 		squareSize = (int) (64 * SCALE);
 		panelSize = (int) (BOARD_SIZE * squareSize);
-
-		this.dimension = new Dimension(panelSize, panelSize);
-		this.setPreferredSize(dimension);
-		inputs = new MouseInputs(this);
-		this.addMouseListener(inputs);
-		this.addMouseMotionListener(inputs);
-
+		dimension = new Dimension(panelSize, panelSize);
 		manager = new Manager(this);
 		objmanager = manager.getObjectManager();
+		inputs = new MouseInputs(this);
+
+		this.setPreferredSize(dimension);
+		this.addMouseListener(inputs);
+		this.addMouseMotionListener(inputs);
 
 		manager.startGame();
 	}
@@ -49,7 +48,7 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		drawBoard(g);
 
-		if (inputs.getClicked()) {
+		if (inputs.hasSelected()) {
 
 			inputs.getPiece().drawMovable(g);
 
