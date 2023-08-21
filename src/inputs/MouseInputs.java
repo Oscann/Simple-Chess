@@ -80,12 +80,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
-		if (p == null)
-			return;
-
-		// resetMove();
-
 	}
 
 	@Override

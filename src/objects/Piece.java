@@ -67,7 +67,7 @@ public abstract class Piece {
 				firstMove = false;
 		}
 
-		setVisualPosition(currentPosition);
+		setVisualPosition((Point) currentPosition.clone());
 		return (index - previousIndex == 0);
 	}
 
