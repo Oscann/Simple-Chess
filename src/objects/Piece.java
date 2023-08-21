@@ -46,9 +46,7 @@ public abstract class Piece {
 	public abstract void defineMovableIndexes();
 
 	public void render(Graphics g) {
-
 		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
-
 	}
 
 	public boolean touch() {
@@ -69,17 +67,10 @@ public abstract class Piece {
 
 			if (firstMove)
 				firstMove = false;
-
-		} else if (index - previousIndex == 0) {
-			setVisualPosition(currentPosition);
-			return true;
-
-		} else {
-			setVisualPosition(currentPosition);
 		}
 
-		return false;
-
+		setVisualPosition(currentPosition);
+		return (index - previousIndex == 0);
 	}
 
 	public void moveTo(int x, int y) {
@@ -101,17 +92,11 @@ public abstract class Piece {
 	}
 
 	public void destroy() {
-
 		if (team == Team.BLACK) {
-
 			manager.blackTeam.remove(this);
-
 		} else {
-
 			manager.whiteTeam.remove(this);
-
 		}
-
 	}
 
 	public void joinTeam(Team team) {
@@ -125,7 +110,6 @@ public abstract class Piece {
 	}
 
 	public boolean isOutOfBounds() {
-
 		if (center.x > manager.getBounds().width || center.x < 0 ||
 				center.y > manager.getBounds().height || center.y < 0)
 			return true;
@@ -133,7 +117,6 @@ public abstract class Piece {
 	}
 
 	public void drawMovable(Graphics g) {
-
 		Point coord;
 
 		g.setColor(Color.gray);
@@ -150,25 +133,10 @@ public abstract class Piece {
 	protected boolean canMoveOrCapture(int index) {
 		if (index < 0 || index > 63)
 			return false;
-
 		if (manager.objects[index] == null)
 			return true;
-		else if (manager.objects[index].team == this.team)
-			return false;
 		else
-			return true;
-
-	}
-
-	protected boolean canCapture(int index) {
-
-		if (manager.objects[index] == null)
-			return false;
-		else if (manager.objects[index].team != team)
-			return true;
-		else
-			return false;
-
+			return manager.objects[index].team != this.team;
 	}
 
 	public Point getVisualPosition() {
@@ -189,8 +157,17 @@ public abstract class Piece {
 	}
 
 	public ArrayList<Integer> getMovable() {
-
 		return movableSpaces;
+	}
+
+	public static enum EPieces {
+
+		PAWN,
+		ROOK,
+		KNIGHT,
+		QUEEN,
+		BISHOP,
+		KING;
 
 	}
 

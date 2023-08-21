@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import objects.EPieces;
+import objects.Piece;
 import objects.Team;
 
 public class Load {
@@ -28,7 +28,7 @@ public class Load {
 
 	}
 
-	public static BufferedImage loadSprite(EPieces p, Team team) {
+	public static BufferedImage loadSprite(Piece.EPieces p, Team team) {
 
 		BufferedImage atlas = loadImg(atlasPath);
 

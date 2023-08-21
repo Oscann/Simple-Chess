@@ -136,7 +136,7 @@ public class ObjectManager {
 		// createObject(Pieces.PAWN, i, Team.WHITE);
 
 		// }
-		createObject(EPieces.ROOK, 0, Team.BLACK);
+		createObject(Piece.EPieces.ROOK, 0, Team.BLACK);
 	}
 
 	public Piece clickedObject(Point click) {
@@ -169,7 +169,7 @@ public class ObjectManager {
 		return -1;
 	}
 
-	public Piece createObject(EPieces p, int index, Team team) {
+	public Piece createObject(Piece.EPieces p, int index, Team team) {
 
 		Point coord = ObjectUtilities.coordFromIndex(index);
 

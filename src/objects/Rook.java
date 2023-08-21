@@ -8,14 +8,15 @@ public class Rook extends Piece {
     public Rook(int x, int y, Team team, Panel panel) {
         super(x, y, team, panel);
         id = 2;
-        sprite = Load.loadSprite(EPieces.ROOK, team);
+        sprite = Load.loadSprite(Piece.EPieces.ROOK, team);
     }
 
     @Override
     public void defineMovableIndexes() {
-        for (int i = 0; i < 64; i++)
-            if (i != 0)
-                movableSpaces.add(i);
+        this.movableSpaces.add(1);
+        this.movableSpaces.add(2);
+        this.movableSpaces.add(3);
+        this.movableSpaces.add(4);
     }
 
 }
