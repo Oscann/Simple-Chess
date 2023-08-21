@@ -12,7 +12,6 @@ import util.ObjectUtilities;
 public abstract class Piece {
 
 	protected Point currentPosition;
-	protected Point visualPosition;
 	protected Point center;
 
 	public short id;
@@ -32,8 +31,7 @@ public abstract class Piece {
 
 		joinTeam(team);
 
-		visualPosition = new Point(x, y);
-		currentPosition = (Point) visualPosition.clone();
+		currentPosition = new Point(x, y);
 		center = new Point(x + Panel.squareSize / 2, y + Panel.squareSize / 2);
 
 		ObjectUtilities.correctPosition(this);
@@ -46,7 +44,7 @@ public abstract class Piece {
 	public abstract void defineMovableIndexes();
 
 	public void render(Graphics g) {
-		g.drawImage(sprite, visualPosition.x, visualPosition.y, Panel.squareSize, Panel.squareSize, null);
+		g.drawImage(sprite, getVisualPosition().x, getVisualPosition().y, Panel.squareSize, Panel.squareSize, null);
 	}
 
 	public boolean touch() {
@@ -86,7 +84,7 @@ public abstract class Piece {
 	}
 
 	public void sit(int index, int prevIndex) {
-		currentPosition = (Point) visualPosition.clone();
+		currentPosition = (Point) getVisualPosition().clone();
 		movableSpaces.clear();
 		manager.update(index, prevIndex, this);
 	}
@@ -140,20 +138,26 @@ public abstract class Piece {
 	}
 
 	public Point getVisualPosition() {
-		return visualPosition;
+		return new Point((int) this.center.getX() - Panel.squareSize / 2,
+				(int) this.center.getY() - Panel.squareSize / 2);
 	}
 
 	public void setVisualPosition(Point position) {
-		this.visualPosition = position;
-		updateCenterPosition();
+		position.translate(Panel.squareSize / 2, Panel.squareSize / 2);
+		setCenter(position);
 	}
 
 	public Point getCenterPosition() {
 		return center;
 	}
 
+	public void setCenter(Point position) {
+		this.center = position;
+	}
+
 	public void updateCenterPosition() {
-		this.center = new Point(visualPosition.x + Panel.squareSize / 2, visualPosition.y + Panel.squareSize / 2);
+		this.center = new Point(getVisualPosition().x + Panel.squareSize / 2,
+				getVisualPosition().y + Panel.squareSize / 2);
 	}
 
 	public ArrayList<Integer> getMovable() {
@@ -161,14 +165,11 @@ public abstract class Piece {
 	}
 
 	public static enum EPieces {
-
 		PAWN,
 		ROOK,
 		KNIGHT,
 		QUEEN,
 		BISHOP,
 		KING;
-
 	}
-
 }
