@@ -47,30 +47,6 @@ public abstract class Piece {
 		g.drawImage(sprite, getVisualPosition().x, getVisualPosition().y, Panel.squareSize, Panel.squareSize, null);
 	}
 
-	public boolean touch() {
-
-		int previousIndex = manager.indexOf(this);
-
-		int _y = (int) center.y / Panel.squareSize;
-		int _x = (int) center.x / Panel.squareSize;
-		int index = ObjectUtilities.indexFromCoord(_x, _y);
-
-		// Move to update
-		defineMovableIndexes();
-
-		if (movableSpaces.contains(index)) {
-
-			ObjectUtilities.correctPosition(this);
-			sit(index, previousIndex);
-
-			if (firstMove)
-				firstMove = false;
-		}
-
-		setVisualPosition((Point) currentPosition.clone());
-		return (index - previousIndex == 0);
-	}
-
 	public void moveTo(int x, int y) {
 
 		int index = ObjectUtilities.indexFromCoord(x, y);
@@ -78,15 +54,18 @@ public abstract class Piece {
 
 		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
 		sit(index, previousIndex);
-
-		if (firstMove)
-			firstMove = false;
 	}
 
 	public void sit(int index, int prevIndex) {
 		currentPosition = (Point) getVisualPosition().clone();
+
+		// Move it to a different function: updating would add the index
+		// twice in the array list
 		movableSpaces.clear();
 		manager.update(index, prevIndex, this);
+
+		if (firstMove)
+			firstMove = false;
 	}
 
 	public void destroy() {
@@ -153,11 +132,6 @@ public abstract class Piece {
 
 	public void setCenter(Point position) {
 		this.center = position;
-	}
-
-	public void updateCenterPosition() {
-		this.center = new Point(getVisualPosition().x + Panel.squareSize / 2,
-				getVisualPosition().y + Panel.squareSize / 2);
 	}
 
 	public ArrayList<Integer> getMovable() {

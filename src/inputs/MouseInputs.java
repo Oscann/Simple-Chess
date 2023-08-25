@@ -12,19 +12,11 @@ import util.ObjectUtilities;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
-	/*
-	 * TO DO:
-	 * - Understand this stupid code
-	 * - Seperate piece selection from touching
-	 * - Fix it entirely
-	 */
-
 	private Panel panel;
 	private ObjectManager objmng;
 
 	private Point currentClick;
 	private Piece p;
-	private boolean selected = false;
 	private Integer x, y, index;
 
 	public MouseInputs(Panel panel) {
@@ -46,26 +38,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (p == null && objmng.clickedObject(new Point(e.getX(), e.getY())) == null) {
-			selected = false;
-			return;
-		}
-
-		x = (int) e.getX() / Panel.squareSize;
-		y = (int) e.getY() / Panel.squareSize;
-		index = ObjectUtilities.indexFromCoord(x, y);
-
-		selected = p.touch();
-
-		if (selected && p.getMovable().contains(index)) {
-			p.moveTo(x, y);
-			selected = false;
-		} else if (index != objmng.indexOf(p)) {
-			p = null;
-			selected = false;
-		}
-
 	}
 
 	@Override
@@ -73,13 +45,29 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		if (!selected)
-			p = objmng.clickedObject(currentClick);
+		p = objmng.clickedObject(currentClick);
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if (p == null) {
+			// selected = false;
+			return;
+		}
+
+		x = (int) e.getX() / Panel.squareSize;
+		y = (int) e.getY() / Panel.squareSize;
+		index = ObjectUtilities.indexFromCoord(x, y);
+
+		if (p.getMovable().contains(index)) {
+			p.moveTo(x, y);
+			p = null;
+		} else if (index != objmng.indexOf(p)) {
+			// p = null;
+		} else {
+
+		}
 	}
 
 	@Override
@@ -96,15 +84,15 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	private void resetMove() {
 		p = null;
-		selected = false;
+		// selected = false;
 	}
 
 	public Piece getPiece() {
 		return p;
 	}
 
-	public boolean hasSelected() {
-		return selected;
-	}
+	// public boolean hasSelected() {
+	// return selected;
+	// }
 
 }

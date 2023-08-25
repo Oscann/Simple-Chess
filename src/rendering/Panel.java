@@ -48,7 +48,7 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		drawBoard(g);
 
-		if (inputs.hasSelected()) {
+		if (inputs.getPiece() != null) {
 
 			inputs.getPiece().drawMovable(g);
 
