@@ -11,12 +11,13 @@ import util.ObjectUtilities;
 
 public abstract class Piece {
 
+	protected boolean firstMove = true;
+	public int size = Panel.squareSize;
+
 	protected Point currentPosition;
 	protected Point center;
 
 	public short id;
-	protected boolean firstMove = true;
-	public int size = Panel.squareSize;
 	protected Team team;
 	protected ArrayList<Integer> movableSpaces;
 
@@ -34,11 +35,15 @@ public abstract class Piece {
 		currentPosition = new Point(x, y);
 		center = new Point(x + Panel.squareSize / 2, y + Panel.squareSize / 2);
 
-		ObjectUtilities.correctPosition(this);
 		movableSpaces = new ArrayList<>();
 
 		defineMovableIndexes();
 
+	}
+
+	public void update() {
+		movableSpaces.clear();
+		defineMovableIndexes();
 	}
 
 	public abstract void defineMovableIndexes();
@@ -58,10 +63,6 @@ public abstract class Piece {
 
 	public void sit(int index, int prevIndex) {
 		currentPosition = (Point) getVisualPosition().clone();
-
-		// Move it to a different function: updating would add the index
-		// twice in the array list
-		movableSpaces.clear();
 		manager.update(index, prevIndex, this);
 
 		if (firstMove)

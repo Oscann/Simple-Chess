@@ -60,12 +60,12 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		y = (int) e.getY() / Panel.squareSize;
 		index = ObjectUtilities.indexFromCoord(x, y);
 
-		System.out.println(p.getMovable().contains(index));
-
 		if (p.getMovable().contains(index)) {
 			p.moveTo(x, y);
+			p = null;
 		} else {
 			p.returnToOriginalPosition();
+
 		}
 
 		if (index != objmng.indexOf(p))
@@ -86,15 +86,10 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	private void resetMove() {
 		p = null;
-		// selected = false;
 	}
 
 	public Piece getPiece() {
 		return p;
 	}
-
-	// public boolean hasSelected() {
-	// return selected;
-	// }
 
 }
