@@ -116,12 +116,17 @@ public abstract class Piece {
 			return manager.objects[index].team != this.team;
 	}
 
+	public void returnToOriginalPosition() {
+		setVisualPosition(currentPosition);
+	}
+
 	public Point getVisualPosition() {
 		return new Point((int) this.center.getX() - Panel.squareSize / 2,
 				(int) this.center.getY() - Panel.squareSize / 2);
 	}
 
 	public void setVisualPosition(Point position) {
+		position = (Point) position.clone();
 		position.translate(Panel.squareSize / 2, Panel.squareSize / 2);
 		setCenter(position);
 	}

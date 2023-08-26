@@ -45,14 +45,14 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		p = objmng.clickedObject(currentClick);
+		if (objmng.clickedObject(currentClick) != null)
+			p = objmng.clickedObject(currentClick);
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (p == null) {
-			// selected = false;
 			return;
 		}
 
@@ -60,14 +60,16 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		y = (int) e.getY() / Panel.squareSize;
 		index = ObjectUtilities.indexFromCoord(x, y);
 
+		System.out.println(p.getMovable().contains(index));
+
 		if (p.getMovable().contains(index)) {
 			p.moveTo(x, y);
-			p = null;
-		} else if (index != objmng.indexOf(p)) {
-			// p = null;
 		} else {
-
+			p.returnToOriginalPosition();
 		}
+
+		if (index != objmng.indexOf(p))
+			p = null;
 	}
 
 	@Override
