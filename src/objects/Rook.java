@@ -25,17 +25,17 @@ public class Rook extends Piece {
                 break;
 
             if (NMovement)
-                NMovement = MovementTesting.processStreamCandidateMovement(-Panel.BOARD_SIZE * i, this);
+                NMovement = MovementTesting.processStraightCandidateMovement(-Panel.BOARD_SIZE * i, this);
 
             if (SMovement)
-                SMovement = MovementTesting.processStreamCandidateMovement(Panel.BOARD_SIZE * i, this);
+                SMovement = MovementTesting.processStraightCandidateMovement(Panel.BOARD_SIZE * i, this);
 
             if (EMovement) {
                 if (ObjectUtilities.coordFromIndex(getIndex() + i).getX() < ObjectUtilities
                         .coordFromIndex(getIndex()).getX())
                     EMovement = false;
                 else
-                    EMovement = MovementTesting.processStreamCandidateMovement(i, this);
+                    EMovement = MovementTesting.processStraightCandidateMovement(i, this);
             }
 
             if (WMovement)
@@ -43,7 +43,7 @@ public class Rook extends Piece {
                         .coordFromIndex(getIndex()).getX())
                     WMovement = false;
                 else
-                    WMovement = MovementTesting.processStreamCandidateMovement(-i, this);
+                    WMovement = MovementTesting.processStraightCandidateMovement(-i, this);
         }
 
     }

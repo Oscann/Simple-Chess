@@ -1,7 +1,7 @@
 package objects;
 
 public class MovementTesting {
-    public static boolean processStreamCandidateMovement(int addToIndex, Piece p) {
+    public static boolean processStraightCandidateMovement(int addToIndex, Piece p) {
         int testIndex = p.getIndex() + addToIndex;
 
         boolean isValid = canMoveOrCapture(testIndex, p);
