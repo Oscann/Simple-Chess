@@ -15,35 +15,35 @@ public class Rook extends Piece {
     @Override
     public void defineMovableIndexes() {
 
-        boolean nMovement = true;
-        boolean sMovement = true;
-        boolean wMovement = true;
-        boolean eMovement = true;
+        boolean NMovement = true;
+        boolean SMovement = true;
+        boolean WMovement = true;
+        boolean EMovement = true;
 
         for (int i = 1; i < Panel.BOARD_SIZE; i++) {
-            if (!nMovement && !sMovement && !wMovement && !eMovement)
+            if (!NMovement && !SMovement && !WMovement && !EMovement)
                 break;
 
-            if (nMovement)
-                nMovement = MovementTesting.processStreamCandidateMovement(-Panel.BOARD_SIZE * i, this);
+            if (NMovement)
+                NMovement = MovementTesting.processStreamCandidateMovement(-Panel.BOARD_SIZE * i, this);
 
-            if (sMovement)
-                sMovement = MovementTesting.processStreamCandidateMovement(Panel.BOARD_SIZE * i, this);
+            if (SMovement)
+                SMovement = MovementTesting.processStreamCandidateMovement(Panel.BOARD_SIZE * i, this);
 
-            if (eMovement) {
+            if (EMovement) {
                 if (ObjectUtilities.coordFromIndex(getIndex() + i).getX() < ObjectUtilities
                         .coordFromIndex(getIndex()).getX())
-                    eMovement = false;
+                    EMovement = false;
                 else
-                    eMovement = MovementTesting.processStreamCandidateMovement(i, this);
+                    EMovement = MovementTesting.processStreamCandidateMovement(i, this);
             }
 
-            if (wMovement)
+            if (WMovement)
                 if (ObjectUtilities.coordFromIndex(getIndex() - i).getX() > ObjectUtilities
                         .coordFromIndex(getIndex()).getX())
-                    eMovement = false;
+                    WMovement = false;
                 else
-                    wMovement = MovementTesting.processStreamCandidateMovement(-i, this);
+                    WMovement = MovementTesting.processStreamCandidateMovement(-i, this);
         }
 
     }
