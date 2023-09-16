@@ -41,12 +41,12 @@ public abstract class Piece {
 
 	}
 
+	public abstract void defineMovableIndexes();
+
 	public void update() {
 		movableSpaces.clear();
 		defineMovableIndexes();
 	}
-
-	public abstract void defineMovableIndexes();
 
 	public void render(Graphics g) {
 		g.drawImage(sprite, getVisualPosition().x, getVisualPosition().y, Panel.squareSize, Panel.squareSize, null);
@@ -56,6 +56,11 @@ public abstract class Piece {
 
 		int index = ObjectUtilities.indexFromCoord(x, y);
 		int previousIndex = manager.indexOf(this);
+
+		if (index - previousIndex == 0) {
+			returnToOriginalPosition();
+			return;
+		}
 
 		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
 		sit(index, previousIndex);
@@ -67,6 +72,9 @@ public abstract class Piece {
 
 		if (firstMove)
 			firstMove = false;
+
+		// TESTS ONLY
+		update();
 	}
 
 	public void destroy() {
@@ -87,13 +95,6 @@ public abstract class Piece {
 
 	}
 
-	public boolean isOutOfBounds() {
-		if (center.x > manager.getBounds().width || center.x < 0 ||
-				center.y > manager.getBounds().height || center.y < 0)
-			return true;
-		return false;
-	}
-
 	public void drawMovable(Graphics g) {
 		Point coord;
 
@@ -106,15 +107,6 @@ public abstract class Piece {
 					coord.y * Panel.squareSize + Panel.squareSize / 4,
 					Panel.squareSize / 2, Panel.squareSize / 2);
 		}
-	}
-
-	protected boolean canMoveOrCapture(int index) {
-		if (index < 0 || index > 63)
-			return false;
-		if (manager.objects[index] == null)
-			return true;
-		else
-			return manager.objects[index].team != this.team;
 	}
 
 	public void returnToOriginalPosition() {
@@ -138,6 +130,10 @@ public abstract class Piece {
 
 	public void setCenter(Point position) {
 		this.center = position;
+	}
+
+	public int getIndex() {
+		return (int) (this.center.getX() / Panel.squareSize) + 8 * (int) (this.center.getY() / Panel.squareSize);
 	}
 
 	public ArrayList<Integer> getMovable() {

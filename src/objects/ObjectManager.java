@@ -21,8 +21,6 @@ public class ObjectManager {
 	private Panel panel;
 	private Manager manager;
 
-	// public King blackKing, whiteKing;
-
 	public ObjectManager(Manager manager) {
 		blackKingCantMove = new HashSet<>();
 		whiteKingCantMove = new HashSet<>();
@@ -107,35 +105,7 @@ public class ObjectManager {
 	}
 
 	public void setBoard() {
-		// createObject(Pieces.ROOK, 0, Team.BLACK);
-		// createObject(Pieces.ROOK, 7, Team.BLACK);
-		// createObject(Pieces.KNIGHT, 1, Team.BLACK);
-		// createObject(Pieces.KNIGHT, 6, Team.BLACK);
-		// createObject(Pieces.BISHOP, 2, Team.BLACK);
-		// createObject(Pieces.BISHOP, 5, Team.BLACK);
-		// blackKing = (King) createObject(Pieces.KING, 4, Team.BLACK);
-		// createObject(Pieces.QUEEN, 3, Team.BLACK);
 
-		// for (int i = 8; i < 16; i++) {
-
-		// createObject(Pieces.PAWN, i, Team.BLACK);
-
-		// }
-
-		// createObject(Pieces.ROOK, 56, Team.WHITE);
-		// createObject(Pieces.ROOK, 63, Team.WHITE);
-		// createObject(Pieces.KNIGHT, 57, Team.WHITE);
-		// createObject(Pieces.KNIGHT, 62, Team.WHITE);
-		// createObject(Pieces.BISHOP, 58, Team.WHITE);
-		// createObject(Pieces.BISHOP, 61, Team.WHITE);
-		// whiteKing = (King) createObject(Pieces.KING, 60, Team.WHITE);
-		// createObject(Pieces.QUEEN, 59, Team.WHITE);
-
-		// for (int i = 48; i < 56; i++) {
-
-		// createObject(Pieces.PAWN, i, Team.WHITE);
-
-		// }
 		createObject(Piece.EPieces.ROOK, 0, Team.BLACK);
 	}
 
@@ -144,9 +114,6 @@ public class ObjectManager {
 		for (int i = 0; i < objects.length; i++) {
 			if (objects[i] == null)
 				continue;
-
-			// if (objects[i].team != Manager.teamToPlay)
-			// continue;
 
 			boolean checkX = click.x > objects[i].getVisualPosition().x
 					&& click.x < objects[i].getVisualPosition().x + Panel.squareSize;
