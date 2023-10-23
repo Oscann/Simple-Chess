@@ -109,6 +109,7 @@ public class ObjectManager {
 		createObject(Piece.EPieces.ROOK, 0, Team.BLACK);
 		createObject(Piece.EPieces.QUEEN, 2, Team.BLACK);
 		createObject(Piece.EPieces.BISHOP, 1, Team.BLACK);
+		createObject(Piece.EPieces.KNIGHT, 30, Team.BLACK);
 	}
 
 	public Piece clickedObject(Point click) {
@@ -154,9 +155,9 @@ public class ObjectManager {
 						panel);
 				break;
 			case KNIGHT:
-				// objects[index] = new Knight(coord.x * Panel.squareSize, coord.y *
-				// Panel.squareSize, team,
-				// panel);
+				objects[index] = new Knight(coord.x * Panel.squareSize, coord.y *
+						Panel.squareSize, team,
+						panel);
 				break;
 			case PAWN:
 				// objects[index] = new Pawn(coord.x * Panel.squareSize, coord.y *

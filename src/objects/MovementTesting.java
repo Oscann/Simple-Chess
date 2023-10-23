@@ -1,5 +1,9 @@
 package objects;
 
+import java.awt.Point;
+
+import util.ObjectUtilities;
+
 public class MovementTesting {
     public static boolean processStraightCandidateMovement(int addToIndex, Piece p) {
         int testIndex = p.getIndex() + addToIndex;
@@ -24,5 +28,11 @@ public class MovementTesting {
             return true;
         else
             return p.manager.objects[index].team != p.team;
+    }
+
+    public static boolean properlyPositionedIndex(Point piecePosition, int movementIndex) {
+        Point movementPoint = ObjectUtilities.coordFromIndex(movementIndex);
+
+        return false;
     }
 }
