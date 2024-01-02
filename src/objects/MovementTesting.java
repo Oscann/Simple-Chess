@@ -21,18 +21,18 @@ public class MovementTesting {
     }
 
     public static boolean canMoveOrCapture(int index, Piece p) {
-        if (index < 0 || index > 63)
-            return false;
+        // if (index < 0 || index > 63)
+        // return false;
 
-        if (p.manager.objects[index] == null)
-            return true;
-        else
-            return p.manager.objects[index].team != p.team;
+        // if (p.manager.objects[index] == null)
+        // return true;
+        // else
+        // return p.manager.objects[index].team != p.team;
+
+        return true;
     }
 
-    public static boolean properlyPositionedIndex(Point piecePosition, int movementIndex) {
-        Point movementPoint = ObjectUtilities.coordFromIndex(movementIndex);
-
+    public static boolean properlyPositionedIndex(Coordinates piecePosition, int movementIndex) {
         return false;
     }
 }

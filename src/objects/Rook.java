@@ -14,38 +14,6 @@ public class Rook extends Piece {
 
     @Override
     public void defineMovableIndexes() {
-
-        boolean NMovement = true;
-        boolean SMovement = true;
-        boolean WMovement = true;
-        boolean EMovement = true;
-
-        for (int i = 1; i < Panel.BOARD_SIZE; i++) {
-            if (!NMovement && !SMovement && !WMovement && !EMovement)
-                break;
-
-            if (NMovement)
-                NMovement = MovementTesting.processStraightCandidateMovement(-Panel.BOARD_SIZE * i, this);
-
-            if (SMovement)
-                SMovement = MovementTesting.processStraightCandidateMovement(Panel.BOARD_SIZE * i, this);
-
-            if (EMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() + i).getX() < ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    EMovement = false;
-                else
-                    EMovement = MovementTesting.processStraightCandidateMovement(i, this);
-            }
-
-            if (WMovement)
-                if (ObjectUtilities.coordFromIndex(getIndex() - i).getX() > ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    WMovement = false;
-                else
-                    WMovement = MovementTesting.processStraightCandidateMovement(-i, this);
-        }
-
     }
 
 }

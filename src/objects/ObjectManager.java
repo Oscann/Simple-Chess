@@ -12,7 +12,7 @@ import util.ObjectUtilities;
 
 public class ObjectManager {
 
-	Piece[] objects;
+	Piece[][] objects;
 	public HashSet<Integer> blackKingCantMove;
 	public HashSet<Integer> whiteKingCantMove;
 	public ArrayList<Piece> blackTeam;
@@ -30,24 +30,26 @@ public class ObjectManager {
 		this.manager = manager;
 		this.panel = manager.getPanel();
 		this.bounds = panel.getDimension();
-		objects = new Piece[64];
+		objects = new Piece[8][8];
 	}
 
 	public void render(Graphics g) {
 
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == null)
-				continue;
+			for (int j = 0; j < objects[i].length; j++) {
+				if (objects[i][j] == null)
+					continue;
 
-			objects[i].render(g);
+				objects[i][j].render(g);
+			}
 		}
 
 	}
 
-	public void update(int index, int previousIndex, Piece p) {
+	public void update(Coordinates newPiecePosition, Coordinates previousPiecePosition, Piece p) {
 
-		updateArray(index, previousIndex, p);
-		manager.alternateTeamToPlay();
+		// updateArray(index, previousIndex, p);
+		// manager.alternateTeamToPlay();
 
 		// updateIndexes();
 		// updateKings();
@@ -94,54 +96,57 @@ public class ObjectManager {
 
 	}
 
-	public void updateArray(int index, int prevIndex, Piece p) {
+	public void updateArray(int x, int y, int px, int py, Piece p) {
 
-		if (objects[index] != null)
-			objects[index].destroy();
+		if (objects[x][y] != null)
+			objects[x][y].destroy();
 
-		objects[index] = p;
-		objects[prevIndex] = null;
+		objects[x][y] = p;
+		objects[px][py] = null;
 
 	}
 
 	public void setBoard() {
 
-		createObject(Piece.EPieces.ROOK, 0, Team.BLACK);
-		createObject(Piece.EPieces.QUEEN, 2, Team.BLACK);
-		createObject(Piece.EPieces.BISHOP, 1, Team.BLACK);
-		createObject(Piece.EPieces.KNIGHT, 30, Team.BLACK);
+		createObject(Piece.EPieces.ROOK, 0, 0, Team.BLACK);
+		createObject(Piece.EPieces.QUEEN, 0, 2, Team.BLACK);
+		createObject(Piece.EPieces.BISHOP, 0, 1, Team.BLACK);
+		createObject(Piece.EPieces.KNIGHT, 4, 6, Team.BLACK);
 	}
 
 	public Piece clickedObject(Point click) {
 
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == null)
-				continue;
+			for (int j = 0; j < objects[i].length; j++) {
+				if (objects[i][j] == null)
+					continue;
 
-			boolean checkX = click.x > objects[i].getVisualPosition().x
-					&& click.x < objects[i].getVisualPosition().x + Panel.squareSize;
-			boolean checkY = click.y > objects[i].getVisualPosition().y
-					&& click.y < objects[i].getVisualPosition().y + Panel.squareSize;
+				boolean checkX = click.x > objects[i][j].getVisualPosition().x
+						&& click.x < objects[i][j].getVisualPosition().x + Panel.squareSize;
+				boolean checkY = click.y > objects[i][j].getVisualPosition().y
+						&& click.y < objects[i][j].getVisualPosition().y + Panel.squareSize;
 
-			if (checkX && checkY)
-				return objects[i];
+				if (checkX && checkY)
+					return objects[i][j];
+			}
 		}
 		return null;
 	}
 
-	public int indexOf(Piece p) {
-
+	public Coordinates coordsOf(Piece p) {
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == p)
-				return i;
+			for (int j = 0; j < objects[i].length; j++) {
+				if (p == objects[i][j])
+					return new Coordinates(i, j);
+			}
 		}
 
-		return -1;
+		return null;
 	}
 
-	public Piece createObject(Piece.EPieces p, int index, Team team) {
+	public Piece createObject(Piece.EPieces p, int x, int y, Team team) {
 
-		Point coord = ObjectUtilities.coordFromIndex(index);
+		Coordinates coord = new Coordinates(x, y);
 
 		switch (p) {
 			case KING:
@@ -150,33 +155,33 @@ public class ObjectManager {
 				// panel);
 				break;
 			case BISHOP:
-				objects[index] = new Bishop(coord.x * Panel.squareSize, coord.y *
-						Panel.squareSize, team,
-						panel);
-				break;
+				// objects[index] = new Bishop(coord.x * Panel.squareSize, coord.y *
+				// Panel.squareSize, team,
+				// panel);
+				// break;
 			case KNIGHT:
-				objects[index] = new Knight(coord.x * Panel.squareSize, coord.y *
+				objects[x][y] = new Knight(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
 						panel);
-				break;
+				// break;
 			case PAWN:
 				// objects[index] = new Pawn(coord.x * Panel.squareSize, coord.y *
 				// Panel.squareSize, team,
 				// panel);
 				break;
 			case QUEEN:
-				objects[index] = new Queen(coord.x * Panel.squareSize, coord.y *
+				objects[x][y] = new Queen(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
 						panel);
 				break;
 			case ROOK:
-				objects[index] = new Rook(coord.x * Panel.squareSize, coord.y *
+				objects[x][y] = new Rook(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
 						panel);
 				break;
 		}
 
-		return objects[index];
+		return objects[x][y];
 
 	}
 

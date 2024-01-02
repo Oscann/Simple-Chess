@@ -15,20 +15,4 @@ public class ObjectUtilities {
 		p.setVisualPosition(new Point(rightX, rightY));
 
 	}
-
-	public static Point coordFromIndex(int index) {
-
-		int y = (int) (index / 8);
-		int x = index % 8;
-
-		return new Point(x, y);
-
-	}
-
-	public static int indexFromCoord(int x, int y) {
-
-		return y * 8 + x;
-
-	}
-
 }

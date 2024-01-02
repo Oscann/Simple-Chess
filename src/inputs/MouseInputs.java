@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import objects.Coordinates;
 import objects.ObjectManager;
 import objects.Piece;
 import rendering.Panel;
@@ -58,17 +59,17 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		x = (int) e.getX() / Panel.squareSize;
 		y = (int) e.getY() / Panel.squareSize;
-		index = ObjectUtilities.indexFromCoord(x, y);
+		Coordinates releaseCoords = new Coordinates(x, y);
 
-		if (p.getMovable().contains(index)) {
-			p.moveTo(x, y);
-			p = null;
-		} else {
-			p.returnToOriginalPosition();
+		// if (p.getMovable().contains(index)) {
+		// p.moveTo(x, y);
+		// p = null;
+		// } else {
+		// p.returnToOriginalPosition();
 
-		}
+		// }
 
-		if (index != objmng.indexOf(p))
+		if (releaseCoords != objmng.coordsOf(p))
 			p = null;
 	}
 

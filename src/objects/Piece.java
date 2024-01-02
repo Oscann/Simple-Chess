@@ -53,22 +53,20 @@ public abstract class Piece {
 	}
 
 	public void moveTo(int x, int y) {
+		Coordinates newPosition = new Coordinates(x, y);
+		Coordinates currentPosition = manager.coordsOf(this);
 
-		int index = ObjectUtilities.indexFromCoord(x, y);
-		int previousIndex = manager.indexOf(this);
-
-		if (index - previousIndex == 0) {
+		if (currentPosition.equals(newPosition)) {
 			returnToOriginalPosition();
 			return;
 		}
 
 		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
-		sit(index, previousIndex);
+		sit(newPosition, currentPosition);
 	}
 
-	public void sit(int index, int prevIndex) {
-		currentPosition = (Point) getVisualPosition().clone();
-		manager.update(index, prevIndex, this);
+	public void sit(Coordinates newPosition, Coordinates previousPosition) {
+		manager.update(newPosition, previousPosition, this);
 
 		if (firstMove)
 			firstMove = false;
@@ -96,17 +94,17 @@ public abstract class Piece {
 	}
 
 	public void drawMovable(Graphics g) {
-		Point coord;
+		// Point coord;
 
-		g.setColor(Color.gray);
+		// g.setColor(Color.gray);
 
-		for (int i = 0; i < movableSpaces.size(); i++) {
-			coord = ObjectUtilities.coordFromIndex(movableSpaces.get(i));
+		// for (int i = 0; i < movableSpaces.size(); i++) {
+		// // coord = ObjectUtilities.coordFromIndex(movableSpaces.get(i));
 
-			g.drawOval(coord.x * Panel.squareSize + Panel.squareSize / 4,
-					coord.y * Panel.squareSize + Panel.squareSize / 4,
-					Panel.squareSize / 2, Panel.squareSize / 2);
-		}
+		// g.drawOval(coord.x * Panel.squareSize + Panel.squareSize / 4,
+		// coord.y * Panel.squareSize + Panel.squareSize / 4,
+		// Panel.squareSize / 2, Panel.squareSize / 2);
+		// }
 	}
 
 	public void returnToOriginalPosition() {
