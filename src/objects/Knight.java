@@ -1,12 +1,11 @@
 package objects;
 
-import rendering.Panel;
 import util.Load;
 
 public class Knight extends Piece {
 
-    public Knight(int x, int y, Team team, Panel panel) {
-        super(x, y, team, panel);
+    public Knight(int x, int y, Team team, ObjectManager objmanager) {
+        super(x, y, team, objmanager);
         id = 3;
         sprite = Load.loadSprite(Piece.EPieces.KNIGHT, team);
     }

@@ -1,9 +1,5 @@
 package objects;
 
-import java.awt.Point;
-
-import util.ObjectUtilities;
-
 public class MovementTesting {
     public static boolean processStraightCandidateMovement(int addToIndex, Piece p) {
         int testIndex = p.getIndex() + addToIndex;
@@ -14,7 +10,7 @@ public class MovementTesting {
         if (isValid) {
             p.movableSpaces.add(testIndex);
 
-            shouldContinue = isValid && p.manager.objects[testIndex] == null;
+            shouldContinue = isValid && p.objmanager.objects[testIndex] == null;
         }
 
         return shouldContinue;

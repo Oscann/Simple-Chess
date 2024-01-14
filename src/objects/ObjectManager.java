@@ -4,32 +4,26 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import main.Manager;
+import main.GameManager;
 import rendering.Panel;
-import util.ObjectUtilities;
 
 public class ObjectManager {
 
 	Piece[][] objects;
-	public HashSet<Integer> blackKingCantMove;
-	public HashSet<Integer> whiteKingCantMove;
+	public boolean[][] blackKingCantMove;
+	public boolean[][] whiteKingCantMove;
 	public ArrayList<Piece> blackTeam;
 	public ArrayList<Piece> whiteTeam;
-	private Dimension bounds;
-	private Panel panel;
-	private Manager manager;
+	private GameManager manager;
 
-	public ObjectManager(Manager manager) {
-		blackKingCantMove = new HashSet<>();
-		whiteKingCantMove = new HashSet<>();
+	public ObjectManager(GameManager manager) {
+		blackKingCantMove = new boolean[8][8];
+		whiteKingCantMove = new boolean[8][8];
 		blackTeam = new ArrayList<>();
 		whiteTeam = new ArrayList<>();
 
 		this.manager = manager;
-		this.panel = manager.getPanel();
-		this.bounds = panel.getDimension();
 		objects = new Piece[8][8];
 	}
 
@@ -47,52 +41,6 @@ public class ObjectManager {
 	}
 
 	public void update(Coordinates newPiecePosition, Coordinates previousPiecePosition, Piece p) {
-
-		// updateArray(index, previousIndex, p);
-		// manager.alternateTeamToPlay();
-
-		// updateIndexes();
-		// updateKings();
-		// manager.checkCheck();
-		// manager.alternateTeamToPlay();
-
-	}
-
-	private void updateKings() {
-
-		// blackKing.defineMovableIndexes();
-		// whiteKing.defineMovableIndexes();
-
-	}
-
-	private void updateIndexes() {
-
-		whiteKingCantMove.clear();
-		blackKingCantMove.clear();
-
-		for (int i = 0; i < blackTeam.size(); i++) {
-
-			if (blackTeam.get(i).id == 5)
-				continue;
-
-			blackTeam.get(i).movableSpaces.clear();
-			blackTeam.get(i).defineMovableIndexes();
-
-			whiteKingCantMove.addAll(blackTeam.get(i).movableSpaces);
-
-		}
-
-		for (int i = 0; i < whiteTeam.size(); i++) {
-
-			whiteTeam.get(i).movableSpaces.clear();
-			whiteTeam.get(i).defineMovableIndexes();
-
-			if (whiteTeam.get(i).id == 5)
-				continue;
-
-			blackKingCantMove.addAll(whiteTeam.get(i).movableSpaces);
-
-		}
 
 	}
 
@@ -152,32 +100,32 @@ public class ObjectManager {
 			case KING:
 				// objects[index] = new King(coord.x * Panel.squareSize, coord.y *
 				// Panel.squareSize, team,
-				// panel);
+				// this);
 				break;
 			case BISHOP:
 				// objects[index] = new Bishop(coord.x * Panel.squareSize, coord.y *
 				// Panel.squareSize, team,
-				// panel);
+				// this);
 				// break;
 			case KNIGHT:
 				objects[x][y] = new Knight(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
-						panel);
+						this);
 				// break;
 			case PAWN:
 				// objects[index] = new Pawn(coord.x * Panel.squareSize, coord.y *
 				// Panel.squareSize, team,
-				// panel);
+				// this);
 				break;
 			case QUEEN:
 				objects[x][y] = new Queen(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
-						panel);
+						this);
 				break;
 			case ROOK:
 				objects[x][y] = new Rook(coord.x * Panel.squareSize, coord.y *
 						Panel.squareSize, team,
-						panel);
+						this);
 				break;
 		}
 
@@ -186,10 +134,10 @@ public class ObjectManager {
 	}
 
 	public Dimension getBounds() {
-		return bounds;
+		return manager.getPanel().getDimension();
 	}
 
-	public Manager getManager() {
+	public GameManager getManager() {
 		return manager;
 	}
 }

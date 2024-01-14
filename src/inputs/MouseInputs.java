@@ -5,36 +5,32 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import main.GameManager;
 import objects.Coordinates;
 import objects.ObjectManager;
 import objects.Piece;
 import rendering.Panel;
-import util.ObjectUtilities;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
-	private Panel panel;
 	private ObjectManager objmng;
 
 	private Point currentClick;
 	private Piece p;
-	private Integer x, y, index;
+	private Integer x, y;
 
-	public MouseInputs(Panel panel) {
-		this.panel = panel;
-		this.objmng = panel.getObjectManager();
+	public MouseInputs(GameManager manager) {
+		this.objmng = manager.getObjectManager();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-
 		if (p == null)
 			return;
 
 		currentClick = new Point(e.getX(), e.getY());
 
 		p.setCenter(currentClick);
-
 	}
 
 	@Override
@@ -46,9 +42,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		if (objmng.clickedObject(currentClick) != null)
-			p = objmng.clickedObject(currentClick);
-
+		p = objmng.clickedObject(currentClick);
 	}
 
 	@Override
@@ -61,15 +55,9 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		y = (int) e.getY() / Panel.squareSize;
 		Coordinates releaseCoords = new Coordinates(x, y);
 
-		// if (p.getMovable().contains(index)) {
-		// p.moveTo(x, y);
-		// p = null;
-		// } else {
-		// p.returnToOriginalPosition();
+		p.handleSit(x, y);
 
-		// }
-
-		if (releaseCoords != objmng.coordsOf(p))
+		if (!releaseCoords.equals(objmng.coordsOf(p)))
 			p = null;
 	}
 
@@ -83,10 +71,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-	}
-
-	private void resetMove() {
-		p = null;
 	}
 
 	public Piece getPiece() {

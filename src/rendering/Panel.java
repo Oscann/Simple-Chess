@@ -7,8 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import inputs.MouseInputs;
-import main.Manager;
-import objects.ObjectManager;
+import main.GameManager;
 
 public class Panel extends JPanel {
 
@@ -22,25 +21,22 @@ public class Panel extends JPanel {
 
 	private Dimension dimension;
 
-	private Manager manager;
-	private ObjectManager objmanager;
-
 	private MouseInputs inputs;
+	private GameManager manager;
 
-	public Panel() {
+	public Panel(GameManager manager) {
 
 		squareSize = (int) (64 * SCALE);
 		panelSize = (int) (BOARD_SIZE * squareSize);
 		dimension = new Dimension(panelSize, panelSize);
-		manager = new Manager(this);
-		objmanager = manager.getObjectManager();
-		inputs = new MouseInputs(this);
+
+		this.manager = manager;
+
+		inputs = manager.getInputs();
+		addMouseListener(inputs);
+		addMouseMotionListener(inputs);
 
 		this.setPreferredSize(dimension);
-		this.addMouseListener(inputs);
-		this.addMouseMotionListener(inputs);
-
-		manager.startGame();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -54,7 +50,8 @@ public class Panel extends JPanel {
 
 		}
 
-		objmanager.render(g);
+		if (manager != null)
+			manager.render(g);
 
 		repaint();
 	}
@@ -85,12 +82,6 @@ public class Panel extends JPanel {
 			g.setColor(white);
 		else
 			g.setColor(black);
-
-	}
-
-	public ObjectManager getObjectManager() {
-
-		return objmanager;
 
 	}
 

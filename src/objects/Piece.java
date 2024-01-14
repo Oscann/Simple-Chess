@@ -1,13 +1,11 @@
 package objects;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import rendering.Panel;
-import util.ObjectUtilities;
 
 public abstract class Piece {
 
@@ -22,13 +20,10 @@ public abstract class Piece {
 	protected ArrayList<Integer> movableSpaces;
 
 	protected BufferedImage sprite;
-	protected Panel panel;
-	protected ObjectManager manager;
+	protected ObjectManager objmanager;
 
-	public Piece(int x, int y, Team team, Panel panel) {
-
-		this.panel = panel;
-		this.manager = panel.getObjectManager();
+	public Piece(int x, int y, Team team, ObjectManager objmanager) {
+		this.objmanager = objmanager;
 
 		joinTeam(team);
 
@@ -38,7 +33,6 @@ public abstract class Piece {
 		movableSpaces = new ArrayList<>();
 
 		defineMovableIndexes();
-
 	}
 
 	public abstract void defineMovableIndexes();
@@ -54,32 +48,29 @@ public abstract class Piece {
 
 	public void moveTo(int x, int y) {
 		Coordinates newPosition = new Coordinates(x, y);
-		Coordinates currentPosition = manager.coordsOf(this);
-
-		if (currentPosition.equals(newPosition)) {
-			returnToOriginalPosition();
-			return;
-		}
+		Coordinates currentPosition = objmanager.coordsOf(this);
 
 		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
-		sit(newPosition, currentPosition);
-	}
 
-	public void sit(Coordinates newPosition, Coordinates previousPosition) {
-		manager.update(newPosition, previousPosition, this);
+		objmanager.update(newPosition, currentPosition, this);
 
 		if (firstMove)
 			firstMove = false;
+	}
 
-		// TESTS ONLY
-		update();
+	public void handleSit(int x, int y) {
+		moveTo(x, y);
+
+		// else {
+		// returnToOriginalPosition();
+		// }
 	}
 
 	public void destroy() {
 		if (team == Team.BLACK) {
-			manager.blackTeam.remove(this);
+			objmanager.blackTeam.remove(this);
 		} else {
-			manager.whiteTeam.remove(this);
+			objmanager.whiteTeam.remove(this);
 		}
 	}
 
@@ -87,9 +78,9 @@ public abstract class Piece {
 		this.team = team;
 
 		if (team == Team.BLACK)
-			manager.blackTeam.add(this);
+			objmanager.blackTeam.add(this);
 		else
-			manager.whiteTeam.add(this);
+			objmanager.whiteTeam.add(this);
 
 	}
 
