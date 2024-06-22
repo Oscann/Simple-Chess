@@ -6,9 +6,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import main.GameManager;
-import objects.Coordinates;
 import objects.ObjectManager;
 import objects.Piece;
+import positioning.Coordinates;
 import rendering.Panel;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
@@ -55,7 +55,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		y = (int) e.getY() / Panel.squareSize;
 		Coordinates releaseCoords = new Coordinates(x, y);
 
-		p.handleSit(x, y);
+		p.handleRelease(x, y);
 
 		if (!releaseCoords.equals(objmng.coordsOf(p)))
 			p = null;

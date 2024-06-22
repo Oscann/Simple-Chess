@@ -1,19 +1,21 @@
 package objects;
 
+import positioning.Coordinates;
+
 public class MovementTesting {
     public static boolean processStraightCandidateMovement(int addToIndex, Piece p) {
-        int testIndex = p.getIndex() + addToIndex;
+        // int testIndex = p.getIndex() + addToIndex;
 
-        boolean isValid = canMoveOrCapture(testIndex, p);
-        boolean shouldContinue = isValid;
+        // boolean isValid = canMoveOrCapture(testIndex, p);
+        // boolean shouldContinue = isValid;
 
-        if (isValid) {
-            p.movableSpaces.add(testIndex);
+        // if (isValid) {
+        // p.movableSpaces.add(testIndex);
 
-            shouldContinue = isValid && p.objmanager.objects[testIndex] == null;
-        }
+        // shouldContinue = isValid && p.objmanager.objects[testIndex] == null;
+        // }
 
-        return shouldContinue;
+        return true;
     }
 
     public static boolean canMoveOrCapture(int index, Piece p) {

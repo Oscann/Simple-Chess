@@ -1,10 +1,13 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import positioning.Coordinates;
+import positioning.Direction;
 import rendering.Panel;
 
 public abstract class Piece {
@@ -15,9 +18,9 @@ public abstract class Piece {
 	protected Point currentPosition;
 	protected Point center;
 
-	public short id;
+	public EPieces type;
 	protected Team team;
-	protected ArrayList<Integer> movableSpaces;
+	protected ArrayList<Coordinates> movableSpaces;
 
 	protected BufferedImage sprite;
 	protected ObjectManager objmanager;
@@ -31,14 +34,16 @@ public abstract class Piece {
 		center = new Point(x + Panel.squareSize / 2, y + Panel.squareSize / 2);
 
 		movableSpaces = new ArrayList<>();
-
-		defineMovableIndexes();
 	}
 
 	public abstract void defineMovableIndexes();
 
+	public void resetMovableIndexes() {
+		this.movableSpaces.clear();
+	}
+
 	public void update() {
-		movableSpaces.clear();
+		resetMovableIndexes();
 		defineMovableIndexes();
 	}
 
@@ -58,12 +63,17 @@ public abstract class Piece {
 			firstMove = false;
 	}
 
-	public void handleSit(int x, int y) {
-		moveTo(x, y);
+	public void handleRelease(int x, int y) {
+		Coordinates coords = objmanager.coordsOf(this);
+		Coordinates destiny = new Coordinates(x, y);
 
-		// else {
-		// returnToOriginalPosition();
-		// }
+		if ((coords.getX() != x || coords.getY() != y) && movableSpaces.contains(destiny)) {
+			moveTo(x, y);
+			// Test purposes
+			update();
+		} else
+			returnToOriginalPosition();
+
 	}
 
 	public void destroy() {
@@ -85,17 +95,33 @@ public abstract class Piece {
 	}
 
 	public void drawMovable(Graphics g) {
-		// Point coord;
 
-		// g.setColor(Color.gray);
+		g.setColor(Color.gray);
 
-		// for (int i = 0; i < movableSpaces.size(); i++) {
-		// // coord = ObjectUtilities.coordFromIndex(movableSpaces.get(i));
+		for (int i = 0; i < movableSpaces.size(); i++) {
+			Coordinates coord = movableSpaces.get(i);
+			g
+					.drawOval(
+							coord.getX() * Panel.squareSize + Panel.squareSize / 4,
+							coord.getY() * Panel.squareSize + Panel.squareSize / 4,
+							Panel.squareSize / 2, Panel.squareSize / 2);
+		}
+	}
 
-		// g.drawOval(coord.x * Panel.squareSize + Panel.squareSize / 4,
-		// coord.y * Panel.squareSize + Panel.squareSize / 4,
-		// Panel.squareSize / 2, Panel.squareSize / 2);
-		// }
+	protected void defineStraightMove(Direction dir) {
+		Coordinates originalCoords = objmanager.coordsOf(this);
+
+		Coordinates c = new Coordinates(originalCoords).translate(dir);
+
+		for (; c.isValid(); c.translate(dir)) {
+			Piece pieceInDestiny = objmanager.getPieceByCoordinate(c);
+
+			if (pieceInDestiny == null || pieceInDestiny.team != this.team)
+				this.movableSpaces.add(new Coordinates(c));
+
+			if (pieceInDestiny != null)
+				break;
+		}
 	}
 
 	public void returnToOriginalPosition() {
@@ -121,11 +147,11 @@ public abstract class Piece {
 		this.center = position;
 	}
 
-	public int getIndex() {
-		return (int) (this.center.getX() / Panel.squareSize) + 8 * (int) (this.center.getY() / Panel.squareSize);
+	public Coordinates getCoordinates() {
+		return objmanager.coordsOf(this);
 	}
 
-	public ArrayList<Integer> getMovable() {
+	public ArrayList<Coordinates> getMovable() {
 		return movableSpaces;
 	}
 
