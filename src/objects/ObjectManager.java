@@ -2,12 +2,10 @@ package objects;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.util.ArrayList;
 
 import main.GameManager;
 import positioning.Coordinates;
-import rendering.Panel;
 
 public class ObjectManager {
 
@@ -28,7 +26,7 @@ public class ObjectManager {
 		objects = new Piece[8][8];
 	}
 
-	public void render(Graphics g) {
+	public void renderObjects(Graphics g) {
 
 		for (int i = 0; i < objects.length; i++) {
 			for (int j = 0; j < objects[i].length; j++) {
@@ -45,10 +43,8 @@ public class ObjectManager {
 	}
 
 	public void updateArray(Coordinates origin, Coordinates destination, Piece p) {
-
 		objects[destination.getX()][destination.getY()] = p;
 		objects[origin.getX()][origin.getY()] = null;
-
 	}
 
 	public void setBoard() {
@@ -58,25 +54,6 @@ public class ObjectManager {
 		createObject(Piece.EPieces.BISHOP, 0, 1, Team.BLACK);
 		createObject(Piece.EPieces.KNIGHT, 4, 6, Team.BLACK);
 		createObject(Piece.EPieces.KNIGHT, 5, 6, Team.WHITE);
-	}
-
-	public Piece clickedObject(Point click) {
-
-		for (int i = 0; i < objects.length; i++) {
-			for (int j = 0; j < objects[i].length; j++) {
-				if (objects[i][j] == null)
-					continue;
-
-				boolean checkX = click.x > objects[i][j].getVisualPosition().x
-						&& click.x < objects[i][j].getVisualPosition().x + Panel.squareSize;
-				boolean checkY = click.y > objects[i][j].getVisualPosition().y
-						&& click.y < objects[i][j].getVisualPosition().y + Panel.squareSize;
-
-				if (checkX && checkY)
-					return objects[i][j];
-			}
-		}
-		return null;
 	}
 
 	public Coordinates coordsOf(Piece p) {
@@ -91,42 +68,34 @@ public class ObjectManager {
 	}
 
 	public Piece createObject(Piece.EPieces p, int x, int y, Team team) {
-
-		Coordinates coord = new Coordinates(x, y);
-
 		switch (p) {
 			case KING:
-				// objects[index] = new King(coord.getX() * Panel.squareSize, coord.getY() *
-				// Panel.squareSize, team,
+				// objects[index] = new King(x, y, team,
 				// this);
 				break;
 			case BISHOP:
-				// objects[index] = new Bishop(coord.getX() * Panel.squareSize, coord.getY() *
-				// Panel.squareSize, team,
+				// objects[index] = new Bishop(x, y, team,
 				// this);
 				// break;
 			case KNIGHT:
-				objects[x][y] = new Knight(coord.getX() * Panel.squareSize, coord.getY() *
-						Panel.squareSize, team,
+				objects[x][y] = new Knight(x, y, team,
 						this);
 				// break;
 			case PAWN:
-				// objects[index] = new Pawn(coord.getX() * Panel.squareSize, coord.getY() *
-				// Panel.squareSize, team,
+				// objects[index] = new Pawn(x, y, team,
 				// this);
 				break;
 			case QUEEN:
-				objects[x][y] = new Queen(coord.getX() * Panel.squareSize, coord.getY() *
-						Panel.squareSize, team,
+				objects[x][y] = new Queen(x, y, team,
 						this);
 				break;
 			case ROOK:
-				objects[x][y] = new Rook(coord.getX() * Panel.squareSize, coord.getY() *
-						Panel.squareSize, team,
+				objects[x][y] = new Rook(x, y, team,
 						this);
 				break;
 		}
 
+		// Test purposes
 		objects[x][y].defineMovableIndexes();
 
 		return objects[x][y];

@@ -42,7 +42,9 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		p = objmng.clickedObject(currentClick);
+		Coordinates pressCoords = Coordinates.coordsFromMouseEvent(e.getX(), e.getY());
+
+		p = objmng.getPieceByCoordinate(pressCoords);
 	}
 
 	@Override
@@ -51,8 +53,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 			return;
 		}
 
-		x = (int) e.getX() / Panel.squareSize;
-		y = (int) e.getY() / Panel.squareSize;
+		x = (int) e.getX() / Panel.SQUARE_SIZE;
+		y = (int) e.getY() / Panel.SQUARE_SIZE;
 		Coordinates releaseCoords = new Coordinates(x, y);
 
 		p.handleRelease(x, y);

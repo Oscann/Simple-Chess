@@ -9,8 +9,8 @@ public class ObjectUtilities {
 
 	public static void correctPosition(Piece p) {
 
-		int rightX = (int) (p.getCenterPosition().x / Panel.squareSize) * Panel.squareSize;
-		int rightY = (int) (p.getCenterPosition().y / Panel.squareSize) * Panel.squareSize;
+		int rightX = (int) (p.getCenterPosition().x / Panel.SQUARE_SIZE) * Panel.SQUARE_SIZE;
+		int rightY = (int) (p.getCenterPosition().y / Panel.SQUARE_SIZE) * Panel.SQUARE_SIZE;
 
 		p.setVisualPosition(new Point(rightX, rightY));
 

@@ -27,7 +27,7 @@ public class GameManager {
 	}
 
 	public void render(Graphics g) {
-		objmanager.render(g);
+		objmanager.renderObjects(g);
 	}
 
 	public void startGame() {

@@ -13,25 +13,22 @@ import rendering.Panel;
 public abstract class Piece {
 
 	protected boolean firstMove = true;
-	public int size = Panel.squareSize;
 
-	protected Point currentPosition;
 	protected Point center;
+	protected ObjectManager objmanager;
 
 	public EPieces type;
 	protected Team team;
 	protected ArrayList<Coordinates> movableSpaces;
-
 	protected BufferedImage sprite;
-	protected ObjectManager objmanager;
 
 	public Piece(int x, int y, Team team, ObjectManager objmanager) {
 		this.objmanager = objmanager;
 
 		joinTeam(team);
 
-		currentPosition = new Point(x, y);
-		center = new Point(x + Panel.squareSize / 2, y + Panel.squareSize / 2);
+		center = new Point(x * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 2,
+				y * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 2);
 
 		movableSpaces = new ArrayList<>();
 	}
@@ -48,16 +45,16 @@ public abstract class Piece {
 	}
 
 	public void render(Graphics g) {
-		g.drawImage(sprite, getVisualPosition().x, getVisualPosition().y, Panel.squareSize, Panel.squareSize, null);
+		g.drawImage(sprite, getVisualPosition().x, getVisualPosition().y, Panel.SQUARE_SIZE, Panel.SQUARE_SIZE, null);
 	}
 
 	public void moveTo(int x, int y) {
 		Coordinates newPosition = new Coordinates(x, y);
 		Coordinates currentPosition = objmanager.coordsOf(this);
 
-		setVisualPosition(new Point(x * Panel.squareSize, y * Panel.squareSize));
+		objmanager.updateArray(currentPosition, newPosition, this);
 
-		objmanager.update(newPosition, currentPosition, this);
+		setVisualPosition(new Point(x * Panel.SQUARE_SIZE, y * Panel.SQUARE_SIZE));
 
 		if (firstMove)
 			firstMove = false;
@@ -102,9 +99,9 @@ public abstract class Piece {
 			Coordinates coord = movableSpaces.get(i);
 			g
 					.drawOval(
-							coord.getX() * Panel.squareSize + Panel.squareSize / 4,
-							coord.getY() * Panel.squareSize + Panel.squareSize / 4,
-							Panel.squareSize / 2, Panel.squareSize / 2);
+							coord.getX() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
+							coord.getY() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
+							Panel.SQUARE_SIZE / 2, Panel.SQUARE_SIZE / 2);
 		}
 	}
 
@@ -125,17 +122,21 @@ public abstract class Piece {
 	}
 
 	public void returnToOriginalPosition() {
+		Coordinates currentCoords = objmanager.coordsOf(this);
+		Point currentPosition = new Point(currentCoords.getX() * Panel.SQUARE_SIZE,
+				currentCoords.getY() * Panel.SQUARE_SIZE);
+
 		setVisualPosition(currentPosition);
 	}
 
 	public Point getVisualPosition() {
-		return new Point((int) this.center.getX() - Panel.squareSize / 2,
-				(int) this.center.getY() - Panel.squareSize / 2);
+		return new Point((int) this.center.getX() - Panel.SQUARE_SIZE / 2,
+				(int) this.center.getY() - Panel.SQUARE_SIZE / 2);
 	}
 
 	public void setVisualPosition(Point position) {
 		position = (Point) position.clone();
-		position.translate(Panel.squareSize / 2, Panel.squareSize / 2);
+		position.translate(Panel.SQUARE_SIZE / 2, Panel.SQUARE_SIZE / 2);
 		setCenter(position);
 	}
 

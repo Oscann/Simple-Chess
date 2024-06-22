@@ -1,5 +1,7 @@
 package positioning;
 
+import rendering.Panel;
+
 public class Coordinates {
     int x, y;
 
@@ -11,6 +13,13 @@ public class Coordinates {
     public Coordinates(Coordinates c) {
         this.x = c.getX();
         this.y = c.getY();
+    }
+
+    public static Coordinates coordsFromMouseEvent(int mouseX, int mouseY) {
+        int px = (int) (mouseX / Panel.SQUARE_SIZE);
+        int py = (int) (mouseY / Panel.SQUARE_SIZE);
+
+        return new Coordinates(px, py);
     }
 
     public Coordinates translate(Direction dir) {
@@ -50,8 +59,6 @@ public class Coordinates {
         }
 
         Coordinates coordObj = (Coordinates) obj;
-        System.out.println(coordObj.toString());
-        System.out.println(this.toString());
 
         return coordObj.x == this.x && coordObj.y == this.y;
     }
