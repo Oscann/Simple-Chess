@@ -38,11 +38,8 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		drawBoard(g);
 
-		if (inputs.getPiece() != null) {
-
-			inputs.getPiece().drawMovable(g);
-
-		}
+		if (inputs.getSelectedPiece() != null)
+			inputs.getSelectedPiece().drawMovable(g);
 
 		if (manager != null)
 			manager.render(g);

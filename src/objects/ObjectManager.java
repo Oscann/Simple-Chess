@@ -78,20 +78,17 @@ public class ObjectManager {
 				// this);
 				// break;
 			case KNIGHT:
-				objects[x][y] = new Knight(x, y, team,
-						this);
+				objects[x][y] = new Knight(x, y, team, this);
 				// break;
 			case PAWN:
 				// objects[index] = new Pawn(x, y, team,
 				// this);
 				break;
 			case QUEEN:
-				objects[x][y] = new Queen(x, y, team,
-						this);
+				objects[x][y] = new Queen(x, y, team, this);
 				break;
 			case ROOK:
-				objects[x][y] = new Rook(x, y, team,
-						this);
+				objects[x][y] = new Rook(x, y, team, this);
 				break;
 		}
 

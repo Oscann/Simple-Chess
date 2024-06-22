@@ -61,10 +61,12 @@ public abstract class Piece {
 	}
 
 	public void handleRelease(int x, int y) {
+		System.out.println(x);
 		Coordinates coords = objmanager.coordsOf(this);
 		Coordinates destiny = new Coordinates(x, y);
 
 		if ((coords.getX() != x || coords.getY() != y) && movableSpaces.contains(destiny)) {
+			System.out.println("A");
 			moveTo(x, y);
 			// Test purposes
 			update();
@@ -142,6 +144,10 @@ public abstract class Piece {
 
 	public Point getCenterPosition() {
 		return center;
+	}
+
+	public Team getTeam() {
+		return this.team;
 	}
 
 	public void setCenter(Point position) {

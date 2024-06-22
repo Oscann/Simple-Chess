@@ -16,7 +16,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	private ObjectManager objmng;
 
 	private Point currentClick;
-	private Piece p;
+	private Piece selectedPiece;
 	private Integer x, y;
 
 	public MouseInputs(GameManager manager) {
@@ -25,12 +25,12 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (p == null)
+		if (selectedPiece == null)
 			return;
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		p.setCenter(currentClick);
+		selectedPiece.setCenter(currentClick);
 	}
 
 	@Override
@@ -39,17 +39,19 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
 		currentClick = new Point(e.getX(), e.getY());
 
 		Coordinates pressCoords = Coordinates.coordsFromMouseEvent(e.getX(), e.getY());
 
-		p = objmng.getPieceByCoordinate(pressCoords);
+		Piece p = objmng.getPieceByCoordinate(pressCoords);
+
+		if (selectedPiece == null || p != null && selectedPiece.getTeam() == p.getTeam())
+			selectedPiece = p;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (p == null) {
+		if (selectedPiece == null) {
 			return;
 		}
 
@@ -57,10 +59,10 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		y = (int) e.getY() / Panel.SQUARE_SIZE;
 		Coordinates releaseCoords = new Coordinates(x, y);
 
-		p.handleRelease(x, y);
+		selectedPiece.handleRelease(x, y);
 
-		if (!releaseCoords.equals(objmng.coordsOf(p)))
-			p = null;
+		if (!releaseCoords.equals(objmng.coordsOf(selectedPiece)))
+			selectedPiece = null;
 	}
 
 	@Override
@@ -75,8 +77,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 	}
 
-	public Piece getPiece() {
-		return p;
+	public Piece getSelectedPiece() {
+		return selectedPiece;
 	}
 
 }
