@@ -1,51 +1,23 @@
 package objects;
 
-import rendering.Panel;
+import positioning.Direction;
 import util.Load;
-import util.ObjectUtilities;
 
 public class Rook extends Piece {
 
-    public Rook(int x, int y, Team team, Panel panel) {
-        super(x, y, team, panel);
-        id = 2;
-        sprite = Load.loadSprite(Piece.EPieces.ROOK, team);
+    public EPieces type = EPieces.ROOK;
+
+    public Rook(int x, int y, Team team, ObjectManager objmanager) {
+        super(x, y, team, objmanager);
+        sprite = Load.loadSprite(EPieces.ROOK, team);
     }
 
     @Override
     public void defineMovableIndexes() {
-
-        boolean NMovement = true;
-        boolean SMovement = true;
-        boolean WMovement = true;
-        boolean EMovement = true;
-
-        for (int i = 1; i < Panel.BOARD_SIZE; i++) {
-            if (!NMovement && !SMovement && !WMovement && !EMovement)
-                break;
-
-            if (NMovement)
-                NMovement = MovementTesting.processStraightCandidateMovement(-Panel.BOARD_SIZE * i, this);
-
-            if (SMovement)
-                SMovement = MovementTesting.processStraightCandidateMovement(Panel.BOARD_SIZE * i, this);
-
-            if (EMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() + i).getX() < ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    EMovement = false;
-                else
-                    EMovement = MovementTesting.processStraightCandidateMovement(i, this);
-            }
-
-            if (WMovement)
-                if (ObjectUtilities.coordFromIndex(getIndex() - i).getX() > ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    WMovement = false;
-                else
-                    WMovement = MovementTesting.processStraightCandidateMovement(-i, this);
-        }
-
+        defineStraightMove(Direction.NORTH);
+        defineStraightMove(Direction.SOUTH);
+        defineStraightMove(Direction.WEST);
+        defineStraightMove(Direction.EAST);
     }
 
 }

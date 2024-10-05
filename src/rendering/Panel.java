@@ -7,40 +7,30 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import inputs.MouseInputs;
-import main.Manager;
-import objects.ObjectManager;
+import main.GameManager;
 
 public class Panel extends JPanel {
 
-	public static int squareSize;
 	public static final int BOARD_SIZE = 8;
 	public static final float SCALE = 1f;
-	public static int panelSize;
+	public static int SQUARE_SIZE = (int) (64 * SCALE);
+	public static int PANEL_SIZE = (int) (BOARD_SIZE * SQUARE_SIZE);
+	private static Dimension DIMENSION = new Dimension(PANEL_SIZE, PANEL_SIZE);
 
 	public Color white = new Color(220, 220, 220);
 	public Color black = new Color(50, 50, 50);
 
-	private Dimension dimension;
-
-	private Manager manager;
-	private ObjectManager objmanager;
-
 	private MouseInputs inputs;
+	private GameManager manager;
 
-	public Panel() {
+	public Panel(GameManager manager) {
+		this.manager = manager;
 
-		squareSize = (int) (64 * SCALE);
-		panelSize = (int) (BOARD_SIZE * squareSize);
-		dimension = new Dimension(panelSize, panelSize);
-		manager = new Manager(this);
-		objmanager = manager.getObjectManager();
-		inputs = new MouseInputs(this);
+		inputs = manager.getInputs();
+		addMouseListener(inputs);
+		addMouseMotionListener(inputs);
 
-		this.setPreferredSize(dimension);
-		this.addMouseListener(inputs);
-		this.addMouseMotionListener(inputs);
-
-		manager.startGame();
+		this.setPreferredSize(DIMENSION);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -48,13 +38,11 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		drawBoard(g);
 
-		if (inputs.getPiece() != null) {
+		if (inputs.getSelectedPiece() != null)
+			inputs.getSelectedPiece().drawMovable(g);
 
-			inputs.getPiece().drawMovable(g);
-
-		}
-
-		objmanager.render(g);
+		if (manager != null)
+			manager.render(g);
 
 		repaint();
 	}
@@ -70,7 +58,7 @@ public class Panel extends JPanel {
 
 			for (int y = 0; y < BOARD_SIZE; y++) {
 
-				g.fillRect(x * squareSize, y * squareSize, squareSize, squareSize);
+				g.fillRect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 				alternateColor(g);
 
 			}
@@ -88,15 +76,9 @@ public class Panel extends JPanel {
 
 	}
 
-	public ObjectManager getObjectManager() {
-
-		return objmanager;
-
-	}
-
 	public Dimension getDimension() {
 
-		return dimension;
+		return DIMENSION;
 
 	}
 

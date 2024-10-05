@@ -1,61 +1,23 @@
 package objects;
 
-import rendering.Panel;
+import positioning.Direction;
 import util.Load;
-import util.ObjectUtilities;
 
 public class Bishop extends Piece {
 
-    public Bishop(int x, int y, Team team, Panel panel) {
-        super(x, y, team, panel);
-        id = 5;
+    public EPieces type = EPieces.BISHOP;
+
+    public Bishop(int x, int y, Team team, ObjectManager objmanager) {
+        super(x, y, team, objmanager);
         sprite = Load.loadSprite(Piece.EPieces.BISHOP, team);
     }
 
     @Override
     public void defineMovableIndexes() {
-
-        boolean NEMovement = true;
-        boolean NWMovement = true;
-        boolean SEMovement = true;
-        boolean SWMovement = true;
-
-        for (int i = 1; i < Panel.BOARD_SIZE; i++) {
-            if (!NEMovement && !NWMovement && !SEMovement && !SWMovement)
-                break;
-
-            if (NEMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() + -7 * i).getX() < ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    NEMovement = false;
-                else
-                    NEMovement = MovementTesting.processStraightCandidateMovement(-7 * i, this);
-            }
-
-            if (NWMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() - 9 * i).getX() > ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    NWMovement = false;
-                else
-                    NWMovement = MovementTesting.processStraightCandidateMovement(-9 * i, this);
-            }
-
-            if (SEMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() + 7 * i).getX() > ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    SEMovement = false;
-                else
-                    SEMovement = MovementTesting.processStraightCandidateMovement(7 * i, this);
-            }
-
-            if (SWMovement) {
-                if (ObjectUtilities.coordFromIndex(getIndex() + 9 * i).getX() < ObjectUtilities
-                        .coordFromIndex(getIndex()).getX())
-                    SWMovement = false;
-                else
-                    SWMovement = MovementTesting.processStraightCandidateMovement(9 * i, this);
-            }
-        }
+        defineStraightMove(Direction.NORTHEAST);
+        defineStraightMove(Direction.NORTHWEST);
+        defineStraightMove(Direction.SOUTHEAST);
+        defineStraightMove(Direction.SOUTHWEST);
     }
 
 }

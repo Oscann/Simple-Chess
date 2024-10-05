@@ -5,71 +5,70 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import main.GameManager;
 import objects.ObjectManager;
 import objects.Piece;
-import rendering.Panel;
-import util.ObjectUtilities;
+import positioning.Coordinates;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
-	private Panel panel;
 	private ObjectManager objmng;
+	private GameManager manager;
 
 	private Point currentClick;
-	private Piece p;
-	private Integer x, y, index;
+	private Piece selectedPiece;
 
-	public MouseInputs(Panel panel) {
-		this.panel = panel;
-		this.objmng = panel.getObjectManager();
+	public MouseInputs(GameManager manager) {
+		this.manager = manager;
+		this.objmng = manager.getObjectManager();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-
-		if (p == null)
+		if (selectedPiece == null)
 			return;
 
 		currentClick = new Point(e.getX(), e.getY());
 
-		p.setCenter(currentClick);
-
+		selectedPiece.setCenter(currentClick);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		System.out.println("mouse clicked");
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		System.out.println("mouse pressed");
+		Coordinates pressCoords = Coordinates.coordsFromMouseEvent(e.getX(),
+				e.getY());
 
-		currentClick = new Point(e.getX(), e.getY());
+		Piece p = objmng.getPieceByCoordinate(pressCoords);
 
-		if (objmng.clickedObject(currentClick) != null)
-			p = objmng.clickedObject(currentClick);
+		boolean isNotMovingSpace = selectedPiece == null
+				|| !selectedPiece.getMovable().contains(pressCoords);
+		boolean isValidChange = p == null || manager.teamToPlay == p.getTeam();
 
+		if (isNotMovingSpace && isValidChange)
+			selectedPiece = p;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (p == null) {
+		System.out.println("mouse released");
+
+		if (selectedPiece == null) {
 			return;
 		}
 
-		x = (int) e.getX() / Panel.squareSize;
-		y = (int) e.getY() / Panel.squareSize;
-		index = ObjectUtilities.indexFromCoord(x, y);
+		Coordinates releasedCoords = Coordinates.coordsFromMouseEvent(e.getX(), e.getY());
 
-		if (p.getMovable().contains(index)) {
-			p.moveTo(x, y);
-			p = null;
-		} else {
-			p.returnToOriginalPosition();
+		boolean moved = selectedPiece.handleRelease(releasedCoords.getX(), releasedCoords.getY());
 
-		}
-
-		if (index != objmng.indexOf(p))
-			p = null;
+		if (moved)
+			selectedPiece = null;
 	}
 
 	@Override
@@ -84,12 +83,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 	}
 
-	private void resetMove() {
-		p = null;
-	}
-
-	public Piece getPiece() {
-		return p;
+	public Piece getSelectedPiece() {
+		return selectedPiece;
 	}
 
 }

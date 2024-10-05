@@ -2,189 +2,132 @@ package objects;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import main.Manager;
-import rendering.Panel;
-import util.ObjectUtilities;
+import main.GameManager;
+import positioning.Coordinates;
 
 public class ObjectManager {
 
-	Piece[] objects;
-	public HashSet<Integer> blackKingCantMove;
-	public HashSet<Integer> whiteKingCantMove;
+	Piece[][] objects;
+	public boolean[][] blackKingCantMove;
+	public boolean[][] whiteKingCantMove;
 	public ArrayList<Piece> blackTeam;
 	public ArrayList<Piece> whiteTeam;
-	private Dimension bounds;
-	private Panel panel;
-	private Manager manager;
+	private GameManager manager;
 
-	public ObjectManager(Manager manager) {
-		blackKingCantMove = new HashSet<>();
-		whiteKingCantMove = new HashSet<>();
+	public ObjectManager(GameManager manager) {
+		blackKingCantMove = new boolean[8][8];
+		whiteKingCantMove = new boolean[8][8];
 		blackTeam = new ArrayList<>();
 		whiteTeam = new ArrayList<>();
 
 		this.manager = manager;
-		this.panel = manager.getPanel();
-		this.bounds = panel.getDimension();
-		objects = new Piece[64];
+		objects = new Piece[8][8];
 	}
 
-	public void render(Graphics g) {
+	public void renderObjects(Graphics g) {
 
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == null)
-				continue;
+			for (int j = 0; j < objects[i].length; j++) {
+				if (objects[i][j] == null)
+					continue;
 
-			objects[i].render(g);
+				objects[i][j].render(g);
+			}
 		}
-
 	}
 
-	public void update(int index, int previousIndex, Piece p) {
-
-		updateArray(index, previousIndex, p);
-		manager.alternateTeamToPlay();
-
-		// updateIndexes();
-		// updateKings();
-		// manager.checkCheck();
-		// manager.alternateTeamToPlay();
-
+	public void update(Piece p, Coordinates newPiecePosition) {
+		updateArray(p, newPiecePosition);
+		updatePiecesMoves();
 	}
 
-	private void updateKings() {
-
-		// blackKing.defineMovableIndexes();
-		// whiteKing.defineMovableIndexes();
-
-	}
-
-	private void updateIndexes() {
-
-		whiteKingCantMove.clear();
-		blackKingCantMove.clear();
-
-		for (int i = 0; i < blackTeam.size(); i++) {
-
-			if (blackTeam.get(i).id == 5)
-				continue;
-
-			blackTeam.get(i).movableSpaces.clear();
-			blackTeam.get(i).defineMovableIndexes();
-
-			whiteKingCantMove.addAll(blackTeam.get(i).movableSpaces);
-
+	private void updatePiecesMoves() {
+		for (int i = 0; i < objects.length; i++) {
+			for (int j = 0; j < objects[i].length; j++) {
+				if (objects[i][j] != null)
+					objects[i][j].update();
+			}
 		}
-
-		for (int i = 0; i < whiteTeam.size(); i++) {
-
-			whiteTeam.get(i).movableSpaces.clear();
-			whiteTeam.get(i).defineMovableIndexes();
-
-			if (whiteTeam.get(i).id == 5)
-				continue;
-
-			blackKingCantMove.addAll(whiteTeam.get(i).movableSpaces);
-
-		}
-
 	}
 
-	public void updateArray(int index, int prevIndex, Piece p) {
+	private void updateArray(Piece p, Coordinates destination) {
+		Coordinates origin = coordsOf(p);
 
-		if (objects[index] != null)
-			objects[index].destroy();
-
-		objects[index] = p;
-		objects[prevIndex] = null;
-
+		objects[destination.getX()][destination.getY()] = p;
+		objects[origin.getX()][origin.getY()] = null;
 	}
 
 	public void setBoard() {
 
-		createObject(Piece.EPieces.ROOK, 0, Team.BLACK);
-		createObject(Piece.EPieces.QUEEN, 2, Team.BLACK);
-		createObject(Piece.EPieces.BISHOP, 1, Team.BLACK);
-		createObject(Piece.EPieces.KNIGHT, 30, Team.BLACK);
+		createObject(Piece.EPieces.ROOK, 0, 0, Team.BLACK);
+		createObject(Piece.EPieces.QUEEN, 0, 2, Team.BLACK);
+		createObject(Piece.EPieces.BISHOP, 0, 1, Team.BLACK);
+		createObject(Piece.EPieces.KNIGHT, 4, 6, Team.BLACK);
+		createObject(Piece.EPieces.ROOK, 5, 6, Team.WHITE);
 	}
 
-	public Piece clickedObject(Point click) {
-
+	public Coordinates coordsOf(Piece p) {
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == null)
-				continue;
-
-			boolean checkX = click.x > objects[i].getVisualPosition().x
-					&& click.x < objects[i].getVisualPosition().x + Panel.squareSize;
-			boolean checkY = click.y > objects[i].getVisualPosition().y
-					&& click.y < objects[i].getVisualPosition().y + Panel.squareSize;
-
-			if (checkX && checkY)
-				return objects[i];
+			for (int j = 0; j < objects[i].length; j++) {
+				if (p == objects[i][j])
+					return new Coordinates(i, j);
+			}
 		}
+
 		return null;
 	}
 
-	public int indexOf(Piece p) {
-
-		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] == p)
-				return i;
-		}
-
-		return -1;
-	}
-
-	public Piece createObject(Piece.EPieces p, int index, Team team) {
-
-		Point coord = ObjectUtilities.coordFromIndex(index);
-
+	public Piece createObject(Piece.EPieces p, int x, int y, Team team) {
 		switch (p) {
 			case KING:
-				// objects[index] = new King(coord.x * Panel.squareSize, coord.y *
-				// Panel.squareSize, team,
-				// panel);
+				// objects[index] = new King(x, y, team,
+				// this);
 				break;
 			case BISHOP:
-				objects[index] = new Bishop(coord.x * Panel.squareSize, coord.y *
-						Panel.squareSize, team,
-						panel);
+				objects[x][y] = new Bishop(x, y, team, this);
 				break;
 			case KNIGHT:
-				objects[index] = new Knight(coord.x * Panel.squareSize, coord.y *
-						Panel.squareSize, team,
-						panel);
+				objects[x][y] = new Knight(x, y, team, this);
 				break;
 			case PAWN:
-				// objects[index] = new Pawn(coord.x * Panel.squareSize, coord.y *
-				// Panel.squareSize, team,
-				// panel);
+				// objects[index] = new Pawn(x, y, team,
+				// this);
 				break;
 			case QUEEN:
-				objects[index] = new Queen(coord.x * Panel.squareSize, coord.y *
-						Panel.squareSize, team,
-						panel);
+				objects[x][y] = new Queen(x, y, team, this);
 				break;
 			case ROOK:
-				objects[index] = new Rook(coord.x * Panel.squareSize, coord.y *
-						Panel.squareSize, team,
-						panel);
+				objects[x][y] = new Rook(x, y, team, this);
 				break;
 		}
 
-		return objects[index];
+		// Test purposes
+		objects[x][y].defineMovableIndexes();
+
+		return objects[x][y];
+
+	}
+
+	public Piece getPieceByCoordinate(Coordinates c) {
+		int x = c.getX();
+		int y = c.getY();
+
+		Piece p = objects[x][y];
+
+		if (p != null)
+			return p;
+
+		return null;
 
 	}
 
 	public Dimension getBounds() {
-		return bounds;
+		return manager.getPanel().getDimension();
 	}
 
-	public Manager getManager() {
+	public GameManager getManager() {
 		return manager;
 	}
 }
