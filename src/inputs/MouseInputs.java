@@ -9,17 +9,17 @@ import main.GameManager;
 import objects.ObjectManager;
 import objects.Piece;
 import positioning.Coordinates;
-import rendering.Panel;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	private ObjectManager objmng;
+	private GameManager manager;
 
 	private Point currentClick;
 	private Piece selectedPiece;
-	private Integer x, y;
 
 	public MouseInputs(GameManager manager) {
+		this.manager = manager;
 		this.objmng = manager.getObjectManager();
 	}
 
@@ -35,33 +35,39 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		System.out.println("mouse clicked");
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		currentClick = new Point(e.getX(), e.getY());
-
-		Coordinates pressCoords = Coordinates.coordsFromMouseEvent(e.getX(), e.getY());
+		System.out.println("mouse pressed");
+		Coordinates pressCoords = Coordinates.coordsFromMouseEvent(e.getX(),
+				e.getY());
 
 		Piece p = objmng.getPieceByCoordinate(pressCoords);
 
-		if (selectedPiece == null || p != null && selectedPiece.getTeam() == p.getTeam())
+		boolean isNotMovingSpace = selectedPiece == null
+				|| !selectedPiece.getMovable().contains(pressCoords);
+		boolean isValidChange = p == null || manager.teamToPlay == p.getTeam();
+
+		if (isNotMovingSpace && isValidChange)
 			selectedPiece = p;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		System.out.println("mouse released");
+
 		if (selectedPiece == null) {
 			return;
 		}
 
-		x = (int) e.getX() / Panel.SQUARE_SIZE;
-		y = (int) e.getY() / Panel.SQUARE_SIZE;
-		Coordinates releaseCoords = new Coordinates(x, y);
+		Coordinates releasedCoords = Coordinates.coordsFromMouseEvent(e.getX(), e.getY());
 
-		selectedPiece.handleRelease(x, y);
+		boolean moved = selectedPiece.handleRelease(releasedCoords.getX(), releasedCoords.getY());
 
-		if (!releaseCoords.equals(objmng.coordsOf(selectedPiece)))
+		if (moved)
 			selectedPiece = null;
 	}
 

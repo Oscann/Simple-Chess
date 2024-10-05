@@ -4,13 +4,15 @@ import java.awt.Graphics;
 
 import inputs.MouseInputs;
 import objects.ObjectManager;
+import objects.Piece;
 import objects.Team;
+import positioning.Coordinates;
 import rendering.Panel;
 import rendering.Window;
 
 public class GameManager {
 
-	public static Team teamToPlay = Team.WHITE;
+	public Team teamToPlay = Team.WHITE;
 	private ObjectManager objmanager;
 	private Panel panel;
 	private MouseInputs inputs;
@@ -34,13 +36,17 @@ public class GameManager {
 		objmanager.setBoard();
 	}
 
-	public void alternateTeamToPlay() {
+	public void handleMove(Piece p, Coordinates newPosition) {
+		objmanager.update(p, newPosition);
 
+		alternateTeamToPlay();
+	}
+
+	public void alternateTeamToPlay() {
 		if (teamToPlay == Team.WHITE)
 			teamToPlay = Team.BLACK;
 		else
 			teamToPlay = Team.WHITE;
-
 	}
 
 	public void checkCheck() {

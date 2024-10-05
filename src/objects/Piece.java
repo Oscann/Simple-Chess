@@ -50,37 +50,27 @@ public abstract class Piece {
 
 	public void moveTo(int x, int y) {
 		Coordinates newPosition = new Coordinates(x, y);
-		Coordinates currentPosition = objmanager.coordsOf(this);
-
-		objmanager.updateArray(currentPosition, newPosition, this);
 
 		setVisualPosition(new Point(x * Panel.SQUARE_SIZE, y * Panel.SQUARE_SIZE));
 
 		if (firstMove)
 			firstMove = false;
+
+		objmanager.getManager().handleMove(this, newPosition);
 	}
 
-	public void handleRelease(int x, int y) {
-		System.out.println(x);
-		Coordinates coords = objmanager.coordsOf(this);
+	public boolean handleRelease(int x, int y) {
+		Coordinates coords = getCoordinates();
 		Coordinates destiny = new Coordinates(x, y);
 
 		if ((coords.getX() != x || coords.getY() != y) && movableSpaces.contains(destiny)) {
-			System.out.println("A");
 			moveTo(x, y);
-			// Test purposes
-			update();
-		} else
-			returnToOriginalPosition();
-
-	}
-
-	public void destroy() {
-		if (team == Team.BLACK) {
-			objmanager.blackTeam.remove(this);
-		} else {
-			objmanager.whiteTeam.remove(this);
+			return true;
 		}
+
+		returnToOriginalPosition();
+
+		return false;
 	}
 
 	public void joinTeam(Team team) {
@@ -108,11 +98,9 @@ public abstract class Piece {
 	}
 
 	protected void defineStraightMove(Direction dir) {
-		Coordinates originalCoords = objmanager.coordsOf(this);
+		Coordinates originalCoords = getCoordinates();
 
-		Coordinates c = new Coordinates(originalCoords).translate(dir);
-
-		for (; c.isValid(); c.translate(dir)) {
+		for (Coordinates c = new Coordinates(originalCoords).translate(dir); c.isValid(); c.translate(dir)) {
 			Piece pieceInDestiny = objmanager.getPieceByCoordinate(c);
 
 			if (pieceInDestiny == null || pieceInDestiny.team != this.team)
@@ -124,7 +112,7 @@ public abstract class Piece {
 	}
 
 	public void returnToOriginalPosition() {
-		Coordinates currentCoords = objmanager.coordsOf(this);
+		Coordinates currentCoords = getCoordinates();
 		Point currentPosition = new Point(currentCoords.getX() * Panel.SQUARE_SIZE,
 				currentCoords.getY() * Panel.SQUARE_SIZE);
 

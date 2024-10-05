@@ -38,11 +38,23 @@ public class ObjectManager {
 		}
 	}
 
-	public void update(Coordinates newPiecePosition, Coordinates previousPiecePosition, Piece p) {
-		updateArray(previousPiecePosition, newPiecePosition, p);
+	public void update(Piece p, Coordinates newPiecePosition) {
+		updateArray(p, newPiecePosition);
+		updatePiecesMoves();
 	}
 
-	public void updateArray(Coordinates origin, Coordinates destination, Piece p) {
+	private void updatePiecesMoves() {
+		for (int i = 0; i < objects.length; i++) {
+			for (int j = 0; j < objects[i].length; j++) {
+				if (objects[i][j] != null)
+					objects[i][j].update();
+			}
+		}
+	}
+
+	private void updateArray(Piece p, Coordinates destination) {
+		Coordinates origin = coordsOf(p);
+
 		objects[destination.getX()][destination.getY()] = p;
 		objects[origin.getX()][origin.getY()] = null;
 	}
@@ -53,7 +65,7 @@ public class ObjectManager {
 		createObject(Piece.EPieces.QUEEN, 0, 2, Team.BLACK);
 		createObject(Piece.EPieces.BISHOP, 0, 1, Team.BLACK);
 		createObject(Piece.EPieces.KNIGHT, 4, 6, Team.BLACK);
-		createObject(Piece.EPieces.KNIGHT, 5, 6, Team.WHITE);
+		createObject(Piece.EPieces.ROOK, 5, 6, Team.WHITE);
 	}
 
 	public Coordinates coordsOf(Piece p) {
@@ -74,12 +86,11 @@ public class ObjectManager {
 				// this);
 				break;
 			case BISHOP:
-				// objects[index] = new Bishop(x, y, team,
-				// this);
-				// break;
+				objects[x][y] = new Bishop(x, y, team, this);
+				break;
 			case KNIGHT:
 				objects[x][y] = new Knight(x, y, team, this);
-				// break;
+				break;
 			case PAWN:
 				// objects[index] = new Pawn(x, y, team,
 				// this);
@@ -103,7 +114,13 @@ public class ObjectManager {
 		int x = c.getX();
 		int y = c.getY();
 
-		return objects[x][y];
+		Piece p = objects[x][y];
+
+		if (p != null)
+			return p;
+
+		return null;
+
 	}
 
 	public Dimension getBounds() {
