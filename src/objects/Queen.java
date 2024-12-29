@@ -10,7 +10,6 @@ public class Queen extends Piece {
     public Queen(int x, int y, Team team, ObjectManager objmanager) {
         super(x, y, team, objmanager);
         sprite = Load.loadSprite(Piece.EPieces.QUEEN, team);
-
     }
 
     @Override

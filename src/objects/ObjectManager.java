@@ -43,7 +43,7 @@ public class ObjectManager {
 		updatePiecesMoves();
 	}
 
-	private void updatePiecesMoves() {
+	public void updatePiecesMoves() {
 		for (int i = 0; i < objects.length; i++) {
 			for (int j = 0; j < objects[i].length; j++) {
 				if (objects[i][j] != null)
@@ -66,6 +66,7 @@ public class ObjectManager {
 		createObject(Piece.EPieces.BISHOP, 0, 1, Team.BLACK);
 		createObject(Piece.EPieces.KNIGHT, 4, 6, Team.BLACK);
 		createObject(Piece.EPieces.ROOK, 5, 6, Team.WHITE);
+		createObject(Piece.EPieces.PAWN, 6, 6, Team.WHITE);
 	}
 
 	public Coordinates coordsOf(Piece p) {
@@ -92,8 +93,8 @@ public class ObjectManager {
 				objects[x][y] = new Knight(x, y, team, this);
 				break;
 			case PAWN:
-				// objects[index] = new Pawn(x, y, team,
-				// this);
+				objects[x][y] = new Pawn(x, y, team,
+						this);
 				break;
 			case QUEEN:
 				objects[x][y] = new Queen(x, y, team, this);
@@ -102,9 +103,6 @@ public class ObjectManager {
 				objects[x][y] = new Rook(x, y, team, this);
 				break;
 		}
-
-		// Test purposes
-		objects[x][y].defineMovableIndexes();
 
 		return objects[x][y];
 
