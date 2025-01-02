@@ -48,7 +48,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 		Piece p = objmng.getPieceByCoordinate(pressCoords);
 
 		boolean isNotMovingSpace = selectedPiece == null
-				|| !selectedPiece.getMovable().contains(pressCoords);
+				|| !selectedPiece.getMovableSpaces().contains(pressCoords);
 		boolean isValidChange = p == null || manager.teamToPlay == p.getTeam();
 
 		if (isNotMovingSpace && isValidChange)

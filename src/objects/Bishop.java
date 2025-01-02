@@ -1,6 +1,7 @@
 package objects;
 
 import positioning.Direction;
+import positioning.MovementHandler;
 import util.Load;
 
 public class Bishop extends Piece {
@@ -14,10 +15,10 @@ public class Bishop extends Piece {
 
     @Override
     public void defineMovableIndexes() {
-        defineStraightMove(Direction.NORTHEAST);
-        defineStraightMove(Direction.NORTHWEST);
-        defineStraightMove(Direction.SOUTHEAST);
-        defineStraightMove(Direction.SOUTHWEST);
+        MovementHandler.defineStraightMove(this, Direction.NORTHEAST);
+        MovementHandler.defineStraightMove(this, Direction.NORTHWEST);
+        MovementHandler.defineStraightMove(this, Direction.SOUTHEAST);
+        MovementHandler.defineStraightMove(this, Direction.SOUTHWEST);
     }
 
 }

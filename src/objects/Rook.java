@@ -1,6 +1,7 @@
 package objects;
 
 import positioning.Direction;
+import positioning.MovementHandler;
 import util.Load;
 
 public class Rook extends Piece {
@@ -14,10 +15,10 @@ public class Rook extends Piece {
 
     @Override
     public void defineMovableIndexes() {
-        defineStraightMove(Direction.NORTH);
-        defineStraightMove(Direction.SOUTH);
-        defineStraightMove(Direction.WEST);
-        defineStraightMove(Direction.EAST);
+        MovementHandler.defineStraightMove(this, Direction.NORTH);
+        MovementHandler.defineStraightMove(this, Direction.SOUTH);
+        MovementHandler.defineStraightMove(this, Direction.WEST);
+        MovementHandler.defineStraightMove(this, Direction.EAST);
     }
 
 }

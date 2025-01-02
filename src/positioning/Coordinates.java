@@ -36,6 +36,10 @@ public class Coordinates {
                 this.getY() < 8;
     }
 
+    public Coordinates copy() {
+        return new Coordinates(x, y);
+    }
+
     public int getX() {
         return this.x;
     }

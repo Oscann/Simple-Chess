@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import positioning.Coordinates;
-import positioning.Direction;
 import rendering.Panel;
 
 public abstract class Piece {
@@ -89,25 +88,10 @@ public abstract class Piece {
 
 		for (int i = 0; i < movableSpaces.size(); i++) {
 			Coordinates coord = movableSpaces.get(i);
-			g
-					.drawOval(
-							coord.getX() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
-							coord.getY() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
-							Panel.SQUARE_SIZE / 2, Panel.SQUARE_SIZE / 2);
-		}
-	}
-
-	protected void defineStraightMove(Direction dir) {
-		Coordinates originalCoords = getCoordinates();
-
-		for (Coordinates c = new Coordinates(originalCoords).translate(dir); c.isValid(); c.translate(dir)) {
-			Piece pieceInDestiny = objmanager.getPieceByCoordinate(c);
-
-			if (pieceInDestiny == null || pieceInDestiny.team != this.team)
-				this.movableSpaces.add(new Coordinates(c));
-
-			if (pieceInDestiny != null)
-				break;
+			g.drawOval(
+					coord.getX() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
+					coord.getY() * Panel.SQUARE_SIZE + Panel.SQUARE_SIZE / 4,
+					Panel.SQUARE_SIZE / 2, Panel.SQUARE_SIZE / 2);
 		}
 	}
 
@@ -146,7 +130,7 @@ public abstract class Piece {
 		return objmanager.coordsOf(this);
 	}
 
-	public ArrayList<Coordinates> getMovable() {
+	public ArrayList<Coordinates> getMovableSpaces() {
 		return movableSpaces;
 	}
 

@@ -24,8 +24,6 @@ public class GameManager {
 		Window window = new Window(this);
 
 		panel = window.getPanel();
-
-		startGame();
 	}
 
 	public void render(Graphics g) {
@@ -34,6 +32,7 @@ public class GameManager {
 
 	public void startGame() {
 		objmanager.setBoard();
+		objmanager.updatePiecesMoves();
 	}
 
 	public void handleMove(Piece p, Coordinates newPosition) {
