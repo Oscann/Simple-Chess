@@ -1,6 +1,7 @@
 package objects;
 
 import positioning.Direction;
+import positioning.MovementHandler;
 import util.Load;
 
 public class Queen extends Piece {
@@ -14,14 +15,14 @@ public class Queen extends Piece {
 
     @Override
     public void defineMovableIndexes() {
-        defineStraightMove(Direction.NORTH);
-        defineStraightMove(Direction.SOUTH);
-        defineStraightMove(Direction.WEST);
-        defineStraightMove(Direction.EAST);
-        defineStraightMove(Direction.NORTHEAST);
-        defineStraightMove(Direction.NORTHWEST);
-        defineStraightMove(Direction.SOUTHEAST);
-        defineStraightMove(Direction.SOUTHWEST);
+        MovementHandler.defineStraightMove(this, Direction.NORTH);
+        MovementHandler.defineStraightMove(this, Direction.SOUTH);
+        MovementHandler.defineStraightMove(this, Direction.WEST);
+        MovementHandler.defineStraightMove(this, Direction.EAST);
+        MovementHandler.defineStraightMove(this, Direction.NORTHEAST);
+        MovementHandler.defineStraightMove(this, Direction.NORTHWEST);
+        MovementHandler.defineStraightMove(this, Direction.SOUTHEAST);
+        MovementHandler.defineStraightMove(this, Direction.SOUTHWEST);
     }
 
 }

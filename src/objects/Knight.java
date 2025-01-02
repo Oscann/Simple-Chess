@@ -28,15 +28,16 @@ public class Knight extends Piece {
         Coordinates originalCoords = this.getCoordinates();
 
         for (short i = 0; i < movingSchema.length; i++) {
-            Coordinates candidateCoordinate = new Coordinates(originalCoords).translate(movingSchema[i]);
-
-            if (!candidateCoordinate.isValid())
-                continue;
+            Coordinates candidateCoordinate = originalCoords.copy().translate(movingSchema[i]);
 
             Piece pieceAtDestiny = objmanager.getPieceByCoordinate(candidateCoordinate);
 
-            if (pieceAtDestiny == null || pieceAtDestiny.getTeam() != this.getTeam())
-                getMovable().add(candidateCoordinate);
+            if (!candidateCoordinate.isValid() ||
+                    pieceAtDestiny != null &&
+                            pieceAtDestiny.getTeam() == this.getTeam())
+                continue;
+
+            getMovableSpaces().add(candidateCoordinate);
         }
     }
 

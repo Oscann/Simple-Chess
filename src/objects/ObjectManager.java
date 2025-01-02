@@ -112,13 +112,13 @@ public class ObjectManager {
 		int x = c.getX();
 		int y = c.getY();
 
-		Piece p = objects[x][y];
+		try {
+			Piece p = objects[x][y];
 
-		if (p != null)
 			return p;
-
-		return null;
-
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 	public Dimension getBounds() {

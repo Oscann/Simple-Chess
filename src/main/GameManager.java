@@ -24,8 +24,6 @@ public class GameManager {
 		Window window = new Window(this);
 
 		panel = window.getPanel();
-
-		startGame();
 	}
 
 	public void render(Graphics g) {
